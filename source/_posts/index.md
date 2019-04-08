@@ -34,3 +34,7 @@ https://mp.weixin.qq.com/s/iMcsEMVC2fsG3RCXnchALQ
 https://mp.weixin.qq.com/s/7X0fz0zxsaYF0K3Vtisueg
 【BATJ面试必会】Jvm 虚拟机篇
 https://mp.weixin.qq.com/s/mo_pQ5Q1o4c-_fPcii3mrg
+我来告诉你，草根程序员如何进入BAT
+http://blog.jobbole.com/107224/
+hive的基础介绍
+https://www.cnblogs.com/qingyunzong/p/8707885.html
