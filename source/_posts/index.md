@@ -38,3 +38,5 @@ https://mp.weixin.qq.com/s/mo_pQ5Q1o4c-_fPcii3mrg
 http://blog.jobbole.com/107224/
 hive的基础介绍
 https://www.cnblogs.com/qingyunzong/p/8707885.html
+Redis 为何这么快？聊聊它的数据结构~
+https://mp.weixin.qq.com/s/wSXtGHVDtfGZQAJk90y_iA
