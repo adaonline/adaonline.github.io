@@ -40,3 +40,11 @@ hive的基础介绍
 https://www.cnblogs.com/qingyunzong/p/8707885.html
 Redis 为何这么快？聊聊它的数据结构~
 https://mp.weixin.qq.com/s/wSXtGHVDtfGZQAJk90y_iA
+一招学会TCP的三次握手和四次挥手
+https://yq.aliyun.com/articles/698935?spm=a2c4e.11157919.spm-cont-list.19.3ba727aeT6A5hL
+TCP IP 详解笔记
+https://www.cnblogs.com/newwy/p/3216327.html
+springboot第一课
+http://www.cnblogs.com/larryzeal/p/5765945.html
+Unix 中的 I/O 模型
+https://mp.weixin.qq.com/s/AwkalVh8LJwb6UBm3hqbyQ
