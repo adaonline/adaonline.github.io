@@ -52,3 +52,7 @@ SpringMVC详解（一）------入门实例
 https://www.cnblogs.com/ysocean/p/7376596.html
 SpringMVC学习笔记
 https://www.cnblogs.com/sunniest/p/4555801.html
+互联网 Java 工程师进阶知识完全扫盲
+https://github.com/doocs/advanced-java
+图解 Java 垃圾回收机制，写得非常好！
+https://mp.weixin.qq.com/s/3GhnGdrShBeVEtQQ9H8D9Q
