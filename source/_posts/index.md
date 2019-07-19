@@ -56,5 +56,5 @@ https://www.cnblogs.com/sunniest/p/4555801.html
 https://github.com/doocs/advanced-java
 图解 Java 垃圾回收机制，写得非常好！
 https://mp.weixin.qq.com/s/3GhnGdrShBeVEtQQ9H8D9Q
-
-我自己尝试一下
+cheduledThreadPoolExecutor解析一（调度任务，任务队列）
+https://donald-draper.iteye.com/blog/2367332
