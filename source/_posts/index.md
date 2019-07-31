@@ -60,3 +60,5 @@ cheduledThreadPoolExecutor解析一（调度任务，任务队列）
 https://donald-draper.iteye.com/blog/2367332
 ScheduledThreadPoolExecutor源码解读
 https://segmentfault.com/a/1190000013030867
+Java并发编程：Callable、Future和FutureTask
+https://www.cnblogs.com/dolphin0520/p/3949310.html
