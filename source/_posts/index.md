@@ -62,3 +62,5 @@ ScheduledThreadPoolExecutor源码解读
 https://segmentfault.com/a/1190000013030867
 Java并发编程：Callable、Future和FutureTask
 https://www.cnblogs.com/dolphin0520/p/3949310.html
+JVM致命错误日志(hs_err_pid.log)分析
+https://blog.csdn.net/chenssy/article/details/78271744
