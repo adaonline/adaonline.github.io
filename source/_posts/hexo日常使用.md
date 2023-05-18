@@ -1,6 +1,7 @@
 ---
 title: hexo日常使用
 tags: hexo
+
 ---
 ## Hexo常用
 
@@ -42,7 +43,7 @@ tags: hexo
   sudo npm install -g n
   升级到稳定版
   sudo n stable
-
+  
   ```
 
 ### 本地部署
@@ -66,3 +67,7 @@ $ hexo d
 ```bash
 $ hexo new "你的文章标题"
 ```
+
+### 测试图片
+
+![1](../images/hexo日常使用/1.jpg)

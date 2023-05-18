@@ -42,8 +42,12 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-# 新建文章的时候就会建立同名文件夹
+##############新建文章的时候就会建立同名文件夹############
 post_asset_folder: false
+marked:
+  prependRoot: true
+  postAsset: true
+########################################################
 relative_link: false
 future: true
 highlight:
