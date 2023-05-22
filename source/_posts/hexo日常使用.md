@@ -1,14 +1,12 @@
 ---
-title: hexo日常使用
+title: 初入hexo
 tags: hexo
-
 ---
-## Hexo常用
+## Hexo安装步骤
 
 ### 安装
 
 需要首先安装nodejs
-
 
 - window安装
   https://nodejs.org/en
@@ -43,7 +41,6 @@ tags: hexo
   sudo npm install -g n
   升级到稳定版
   sudo n stable
-  
   ```
 
 ### 本地部署
@@ -55,6 +52,16 @@ $ hexo s #部署运营
 ```
 
 ### 部署到github
+
+```yml
+#需要在_config.yml中提前设置好自己的deploy内容
+deploy:
+  type: git
+  repo: https://github.com/adaonline/adaonline.github.io.git
+  branch: master
+```
+
+部署命令
 
 ```shell
 $ hexo deploy
@@ -70,4 +77,4 @@ $ hexo new "你的文章标题"
 
 ### 测试图片
 
-![1](../images/hexo日常使用/1.jpg)
+![1](../images/hexo日常使用/saierda.jpg)
