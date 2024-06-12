@@ -2,6 +2,8 @@
 title: 如何在hexo中插入图片
 date: 2023-05-23 00:42:57
 tags: hexo
+categories:
+  - hexo
 ---
 
 1. 安装插件

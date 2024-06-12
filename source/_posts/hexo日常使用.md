@@ -1,6 +1,9 @@
 ---
 title: 初入hexo
+date: 2023-05-23 00:42:57
 tags: hexo
+categories:
+  - hexo
 ---
 ## Hexo安装步骤
 
