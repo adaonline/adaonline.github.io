@@ -20,7 +20,7 @@ categories:
      postAsset: true
    ```
 
-3. 在“Blog->source”下新建"imags"文件夹。注意"imags"与"_posts"同级。(此处Blog为你的hexo文件夹)
+3. 在“Blog->source”下新建"images"文件夹。注意"images"与"_posts"同级。(此处Blog为你的hexo文件夹)
 
 4. 在Typora中“文件->设置偏好->图像“。在插入图片时”复制到指定路径“设置为
 
@@ -30,9 +30,9 @@ categories:
 
    也可以不做这步，自己每次手动复制也行，就是麻烦，当然别的工具也可以
 
-   ![image-20230523011332860](../images/如何在hexo中插入图片/image-20230523011332860.png)
+   ![image-20240619003626564](../images/如何在hexo中插入图片/image-20240619003626564.png)
 
-5. 在”格式->图像->设置图片根目录“将"Blog->source"设置为根目录。
+   在”格式->图像->设置图片根目录“将"Blog->source"设置为根目录。
 
    我没有设置这一步，但是可以了，不行的话，设置和不设置都试试
 
