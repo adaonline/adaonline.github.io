@@ -4,7 +4,7 @@ date: 2024-06-18 23:17:44
 tags: docker
 ---
 
-# 1.docker安装
+# docker安装
 
 官网安装流程：
 
@@ -64,7 +64,7 @@ docker-compose-plugin 批量工具
 
 
 
-# 2.常见命令
+# 常见命令
 ### 下载镜像
 
 相关命令
