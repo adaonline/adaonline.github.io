@@ -2,6 +2,8 @@
 title: docker快速入门
 date: 2024-06-18 23:17:44
 tags: docker
+categories:
+  - docker
 ---
 
 # docker安装
