@@ -42,9 +42,16 @@ systemctl enable docker --now
 
 # 配置加速，默认去dockerhub的，可以配置国内镜像加速
 sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json <<-'EOF'
+sudo tee /etc/docker/daemon.json <<EOF
 {
-  "registry-mirrors": ["https://82m9ar63.mirror.aliyuncs.com"]
+    "registry-mirrors": [
+        "https://hub.uuuadc.top",
+        "https://docker.anyhub.us.kg",
+        "https://dockerhub.jobcher.com",
+        "https://dockerhub.icu",
+        "https://docker.ckyl.me",
+        "https://docker.awsl9527.cn"
+    ]
 }
 EOF
 
@@ -362,5 +369,292 @@ docker login
 docker tag mynginx:v1.0 simbaada/mynginx:v1.0
 # 推送镜像
 docker push simbaada/mynginx:v1.0
+# 批量删除容器命令
+#慎用，不要把有用的删掉了
+#docker ps -aq 获取当前所有的容器ID
+docker rm -f $(docker ps -aq)
 ```
 
+# 存储(目录挂载，卷映射)
+
+## 目录挂载
+
+在上面我们如果要修改nginx的文件需要进入容器内部
+
+```shell
+docker exce -it 4f231d6ce759 bash #4f231d6ce759为容器id bash为交互方式
+```
+
+修改了容器内的文件后，容器移除或者出问题则数据文件会丢失，
+
+**这时候就需要将外部文件挂载到容器中**
+
+```shell
+#在启动容器的时候-v即可
+#-v 外服文件位置:容器内文件位置
+-v /app/nghtml:/usr/share/nginx/html
+```
+
+执行以下命令
+
+```shell
+docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name app01 nginx
+```
+
+同时还会**自动创建目录**
+
+![image-20240619235400130](../images/docker快速入门/image-20240619235400130.png)
+
+这时候访问80端口会发现是403，因为nginx文件挂载到了外部，但是外部没有index.html
+
+我们创建文件,再访问就会发现对应的页面有内容了
+
+```shell
+echo hello. > index.html #后续卷映射也用到这个文件
+```
+
+你再删掉这个容器，重新执行上面的挂载启动内容命令，还是可以的
+
+**进入内部修改文件，同样是可以修改外部文件的。**
+
+## 卷映射
+
+如果挂载的是配置文件夹/etc/nginx/
+
+```shell
+docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html -v /app/ngconf:/etc/nginx --name app02 nginx
+```
+
+![image-20240620002115594](../images/docker快速入门/image-20240620002115594.png)
+
+这时候可能会启动不来容器，因为先生成外部空目录，挂载到内部后，相当于内部什么也没有，容器启动找不到配置文件，除非提前放入配置文件。默认是以外部文件为准。
+
+需要一个初始化跟内部保持一致的挂载方式，这就叫**卷映射**。
+
+卷就是一个存储，计算机以前是用一卷纸打孔方式存储。
+
+命令形式：
+
+```shell
+# 不以.或者./开始的就视为卷映射
+-v ngconf:/etc/nginx
+```
+
+卷映射配置文件，开启一个新容器
+
+```shell
+docker run -d -p 99:80 -v /app/nghtml:/usr/share/nginx/html -v ngconf:/etc/nginx --name new_app nginx
+```
+
+![image-20240620002615246](../images/docker快速入门/image-20240620002615246.png)
+
+访问99端口就可以看到hello.了，之前我们修改的index文件
+
+### 修改卷映射的目录内容
+
+docker统一把卷映射放在了`/var/lib/docker/volumes/<volumes-name>`下
+
+这时候修改内容，容器内部也会有变动，跟目录挂载相同
+
+![image-20240620003203217](../images/docker快速入门/image-20240620003203217.png)
+
+## 总结
+
+目录挂载`-v /app/nghtml:/usr/share/nginx/html`：初始启动，外面目录与内部目录都是空的，互相同步
+
+卷映射`-v ngconf:/etc/nginx`：初始启动，外面目录以内部目录为准，互相同步
+
+**删除容器，卷不会被删除**
+
+```shell
+#列出所有的卷
+docker volume ls
+#创建卷
+docker volume create newvolume
+#查看卷详情，列出创建时间，所在目录等
+docker volume inspect ngconf
+```
+
+![image-20240620003845726](../images/docker快速入门/image-20240620003845726.png)
+
+
+
+# 网络
+
+## 容器访问容器
+
+创建两个容器，进入app1，访问app2
+
+
+```shell
+docker run -d -p 80:80 --name app1 nginx
+docker run -d -p 90:80 --name app2 nginx
+docker exec -it app1 bash
+#在app1里访问app2，这里x.x.x.x是你自己的服务器地址
+curl http://x.x.x.x:90
+```
+
+![image-20240620004708550](../images/docker快速入门/image-20240620004708550.png)
+
+但是这样会比较麻烦，其实是访问了外部网络让后再进来。
+
+其实装了docker后，**docker会在本地装一个docker0网卡**
+
+可以使用`ip a`查看
+
+docker创建容器后都会加入这个网络，然后也会分配对应的ip地址
+
+![image-20240620004936495](../images/docker快速入门/image-20240620004936495.png)
+
+```shell
+#查看容器细节
+docker container inspect app1
+#也可以直接用inspect，可以看到容器的id，查看app2也是一样的,如果只有两个容器，这时候app2应为172.17.0.3
+docker inspect app1
+```
+
+![image-20240620005135433](../images/docker快速入门/image-20240620005135433.png)
+
+这时候进入app1，重新执行`curl http://172.17.0.3:80 `,就可以访问首页了（**注意，这里直接用容器内部端口即可**）
+
+
+
+## 网络访问固定
+
+ocker为每个容器分配唯一ip，就可以使用`容器ip+容器端口`互相访问
+
+ip可能随时变化，docker0默认不支持主机域名
+
+我们可以**创建自定义网络，容器名就是稳定域名**
+
+```shell
+#创建自定义网络
+docker network create mynet
+#查看网络列表
+docker network ls
+```
+
+![image-20240620011430368](../images/docker快速入门/image-20240620011430368.png)
+
+删掉之前的容器，重新创建两个,使用--network指定网络
+
+```shell
+docker run -d -p 80:80 --name app1 --network mynet nginx #创建后inspect查看详情，这个是172.18.0.2
+docker run -d -p 90:80 --name app2 --network mynet nginx #创建后inspect查看详情，这个是172.18.0.3
+```
+
+进入app1，访问app2的内容
+
+**容器的名就是访问的域名**
+
+```shell
+docker exec -it app1 bash
+curl http://app2:80 #直接访问容器，使用容器的80端口，这里用172.18.0.3也可以的
+```
+
+![image-20240620011940898](../images/docker快速入门/image-20240620011940898.png)
+
+## 总结
+
+1. docker为每个容器分配唯一ip，就可以使用`容器ip+容器端口`互相访问
+
+   ip可能随时变化，docker0默认不支持主机域名
+
+2. 我们可以**创建自定义网络，容器名就是稳定域名**
+3. 创建自定义网络并且重新开启容器后，可以用容器id，或者容器名直接访问，记得端口是容器内部端口
+
+# 网络实践
+
+## Redis主从复制集群
+
+### 初始化环境，开启容器
+
+1. redis01作为主集，负责写；redis02作为从集，负责读
+2. redis01端口映射（外服:内部->6379:6379）；redis02端口映射（外部:内部->6380:6389）
+3. redis实例保存数据的目录挂载到外部目录（redis01->/app/rd1；redis02->/app/rd2）
+4. 采用自己创建的docker网络mynet
+5. 采用bitnami的redis镜像(修改环境变量即可)，因为官方的还要修改配置文件，这里做实验用就图方便，参数可以查看dockehub里的bitnami/redis文档
+
+```shell
+#设置主集
+REDIS_REPLICATION_MODE=master
+REDIS_PASSWORD=123456
+#设置从集
+REDIS_REPLICATION_MODE=slave
+REDIS_MASTER_HOST=redis01 #主集地址，域名形式
+REDIS_MASTER_PORT_NUMBER=6379 #主集端口，因为是docker内部访问，都是内部端口6379
+REDIS_MASTER_PASSWORD=123456 #主集密码
+REDIS_PASSWORD=123456 #从集密码
+```
+
+记得提前定义网络
+
+```shell
+#自定义网络
+docker network create mynet
+#下载好镜像
+docker pull bitnami/redis
+```
+
+创建主集，命令过长可以用反斜线，其中`-e`是指定环境变量
+
+```shell
+docker run -d -p 6379:6379 \
+-v /app/rd1:/bitnami/redis/data \
+-e REDIS_REPLICATION_MODE=master \
+-e REDIS_PASSWORD=123456 \
+--network mynet --name redis01 \
+bitnami/redis
+```
+
+这里会有个错误，因为创建的目录rd1只有root用户可读可写，`chmod -R 777 rd1`修改了重新启动即可，同理直接创建rd2修改权限，然后`docker restart 容器id`重启之前的容器即可
+
+![image-20240620014200299](../images/docker快速入门/image-20240620014200299.png)
+
+启动从集
+
+```shell
+docker run -d -p 6380:6379 \
+-v /app/rd2:/bitnami/redis/data \
+-e REDIS_REPLICATION_MODE=slave \
+-e REDIS_MASTER_HOST=redis01 \
+-e REDIS_MASTER_PORT_NUMBER=6379 \
+-e REDIS_MASTER_PASSWORD=123456 \
+-e REDIS_PASSWORD=123456 \
+--network mynet --name redis02 \
+bitnami/redis
+```
+
+### 验证
+
+当两个容器都启动完成后，用RedisDesktopManager连接到服务器的两个redis容器，记得开启防火墙规则端口，6379，6380
+
+RedisDesktopManager可以去github下载：https://github.com/lework/RedisDesktopManager-Windows
+
+![image-20240620022106280](../images/docker快速入门/image-20240620022106280.png)
+
+1. 写数据到master
+
+   ![image-20240620022244815](../images/docker快速入门/image-20240620022244815.png)
+
+2. 查看从集
+
+   ![image-20240620022320865](../images/docker快速入门/image-20240620022320865.png)
+
+3. 修改同样可以同步
+
+4. 这只是实验，真正的生产环境更复杂
+
+5. 启动一个mysql容器
+
+   挂载配置文件，挂载数据存储，设置root密码
+
+   ```shell
+   docker run -d -p 3306:3306 \
+   -v /app/myconf:/etc/mysql/conf.d \
+   -v /app/mydata:/var/lib/mysql \
+   -e MYSQL_ROOT_PASSWORD=123456 \
+   mysql:8.0.37-debian
+   ```
+
+   
