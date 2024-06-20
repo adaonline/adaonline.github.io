@@ -1,12 +1,14 @@
 ---
 title: docker快速入门
 date: 2024-06-18 23:17:44
-tags: docker
+tags: 
+  - docker
 categories:
   - docker
+toc: true # 是否启用内容索引
 ---
 
-# docker安装
+# 1. docker安装
 
 官网安装流程：
 
@@ -73,8 +75,8 @@ docker-compose-plugin 批量工具
 
 
 
-# 常见命令
-### 下载镜像
+# 2. 常见命令
+## 2.1 下载镜像
 
 相关命令
 
@@ -110,9 +112,9 @@ docker rmi nginx:1.26.0
 
 记得加上完整名字
 
-### 启动容器
+## 2.2 启动容器
 
-#### 启动命令
+### 启动命令
 
 ```
 docker run nginx #这里会阻塞命令行，后台启动在下文
@@ -146,26 +148,26 @@ docker ps -a
 
 ![image-20240619005242985](../images/docker快速入门/image-20240619005242985.png)
 
-#### 重新启动
+### 重新启动
 
 ```shell
 docker start ec2 #使用容器id重新启动，可以只使用前几位id，用来与别的容器区分即可，就会发现重新启动起来了
 docker start ecstatic_tesla #也可以使用容器名
 ```
 
-#### 停止容器
+### 停止容器
 
 ```shell
 docker stop ecstatic_tesla #也可以使用容器名
 ```
 
-#### 重启
+### 重启
 
 ```shell
 docker restart (id或者应用名)
 ```
 
-#### 查看状态
+### 查看状态
 
 ```shell
 docker stats ec2 #用容器名也可以，以下同上
@@ -174,13 +176,13 @@ docker stats ec2 #用容器名也可以，以下同上
 
 ![image-20240619005826291](../images/docker快速入门/image-20240619005826291.png)
 
-#### 查看容器日志
+### 查看容器日志
 
 ```shell
 docker logs ec2
 ```
 
-#### 删除容器
+### 删除容器
 
 ```shell
 docker rm ec2 #运行中的容器会提示你需要先停止，或者用 force remove 就是加上 -f 命令行参数
@@ -188,7 +190,7 @@ docker rm ec2 #运行中的容器会提示你需要先停止，或者用 force r
 
 ![image-20240619012836999](../images/docker快速入门/image-20240619012836999.png)
 
-#### 后台启动
+### 后台启动
 
 ```shell
 docker run -d --name mynginx nginx
@@ -198,7 +200,7 @@ docker run -d --name mynginx nginx
 
 这时候虽然用docker ps查看虽然还是占用80端口，但是暂时还是不能访问，占用的是容器系统的80端口
 
-#### 端口映射
+### 端口映射
 
 端口映射，宿主机的端口都是独立冲突的，容器的端口可以重复，因为互相不影响
 
@@ -212,7 +214,7 @@ docker run -d --name mynginx -p 80:80 nginx
 
 ![image-20240619013812602](../images/docker快速入门/image-20240619013812602.png)
 
-#### 进入容器
+### 进入容器
 
 为后续修改容器内容做准备
 
@@ -226,7 +228,7 @@ docker exec -it mynginx /bin/bash
 
 ![image-20240619014859547](../images/docker快速入门/image-20240619014859547.png)
 
-### 修改页面
+## 2.3 修改页面
 
 nginx静态页面地址在
 
@@ -244,9 +246,9 @@ nginx静态页面地址在
 
 ![image-20240619015355235](../images/docker快速入门/image-20240619015355235.png)
 
-### 保存分享镜像
+## 2.4 保存分享镜像
 
-#### 用容器生成镜像
+### 用容器生成镜像
 
 可以使用docker commit命令
 
@@ -260,7 +262,7 @@ docker commit -m "update index" mynginx mynginx:v1.0
 
 ![image-20240619015744062](../images/docker快速入门/image-20240619015744062.png)
 
-#### 保存镜像到文件
+### 保存镜像到文件
 
 可以使用docker save命令，-o可以指定输出到什么文件
 
@@ -270,7 +272,7 @@ docker save -o mynginx.tar mynginx:v1.0
 
 ![image-20240619020043766](../images/docker快速入门/image-20240619020043766.png)
 
-#### 使用镜像文件
+### 使用镜像文件
 
 可以先删除本机所有镜像和容器
 
@@ -287,15 +289,15 @@ docker load -i mynginx.tar
 docker run -d --name mynginx -p 80:80 mynginx:v1.0
 ```
 
-#### 分享镜像
+### 分享镜像
 
-##### 登录
+#### 登录
 
 https://hub.docker.com/
 
 ![image-20240619021902030](../images/docker快速入门/image-20240619021902030.png)
 
-##### 命名
+#### 命名
 
 先给镜像改名，需要（用户名/镜像名）
 
@@ -305,13 +307,13 @@ docker tag mynginx:v1.0 simbaada/mynginx:v1.0
 
 ![image-20240619022025972](../images/docker快速入门/image-20240619022025972.png)
 
-##### 推送(国内可能会timeout)
+#### 推送(国内可能会timeout)
 
 ```shell
 docker push simbaada/mynginx:v1.0
 ```
 
-### 命令总结
+## 2.5 命令总结
 
 ```shell
 #查看运行中的容器
@@ -374,10 +376,11 @@ docker push simbaada/mynginx:v1.0
 #docker ps -aq 获取当前所有的容器ID
 docker rm -f $(docker ps -aq)
 ```
+以上为所有命令总结
 
-# 存储(目录挂载，卷映射)
+# 3. 存储(目录挂载，卷映射)
 
-## 目录挂载
+## 3.1 目录挂载
 
 在上面我们如果要修改nginx的文件需要进入容器内部
 
@@ -417,7 +420,7 @@ echo hello. > index.html #后续卷映射也用到这个文件
 
 **进入内部修改文件，同样是可以修改外部文件的。**
 
-## 卷映射
+## 3.2 卷映射
 
 如果挂载的是配置文件夹/etc/nginx/
 
@@ -458,7 +461,7 @@ docker统一把卷映射放在了`/var/lib/docker/volumes/<volumes-name>`下
 
 ![image-20240620003203217](../images/docker快速入门/image-20240620003203217.png)
 
-## 总结
+## 3.3 总结
 
 目录挂载`-v /app/nghtml:/usr/share/nginx/html`：初始启动，外面目录与内部目录都是空的，互相同步
 
@@ -477,11 +480,9 @@ docker volume inspect ngconf
 
 ![image-20240620003845726](../images/docker快速入门/image-20240620003845726.png)
 
+# 4. 网络
 
-
-# 网络
-
-## 容器访问容器
+## 4.1 容器访问容器
 
 创建两个容器，进入app1，访问app2
 
@@ -519,7 +520,7 @@ docker inspect app1
 
 
 
-## 网络访问固定
+## 4.2 网络访问固定
 
 ocker为每个容器分配唯一ip，就可以使用`容器ip+容器端口`互相访问
 
@@ -554,7 +555,7 @@ curl http://app2:80 #直接访问容器，使用容器的80端口，这里用172
 
 ![image-20240620011940898](../images/docker快速入门/image-20240620011940898.png)
 
-## 总结
+## 4.3 总结
 
 1. docker为每个容器分配唯一ip，就可以使用`容器ip+容器端口`互相访问
 
@@ -563,9 +564,9 @@ curl http://app2:80 #直接访问容器，使用容器的80端口，这里用172
 2. 我们可以**创建自定义网络，容器名就是稳定域名**
 3. 创建自定义网络并且重新开启容器后，可以用容器id，或者容器名直接访问，记得端口是容器内部端口
 
-# 网络实践
+# 5. 网络实践
 
-## Redis主从复制集群
+## 5.1 Redis主从复制集群
 
 ### 初始化环境，开启容器
 

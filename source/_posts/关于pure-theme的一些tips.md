@@ -1,12 +1,12 @@
 ---
-title: 关于pure theme的一些tips
+title: 关于hexo theme的一些tips
 date: 2024-06-13 01:49:47
 tags: hexo
 categories:
   - hexo
 ---
 
-# 左侧侧边栏页面点击返回404
+# pure主题左侧侧边栏页面点击返回404
 
 在一些左侧侧边栏，刚搭建完是有首页、归档.....关于等一些内容
 但是大部分是需要自己定制的
@@ -28,3 +28,31 @@ hexo s
    Mark一下
 
 https://github.com/cofess/hexo-theme-pure/issues/125#issuecomment-529211389
+
+# 目录显示错误
+
+![image-20240621065855361](../images/关于pure-theme的一些tips/image-20240621065855361.png)
+
+原因：markdown文件编写时候目录层级不对
+
+解决办法：一级别目录用一个#，二级别目录就必须是两个##，不能是三个或者四个
+
+# 去掉目录额外编号
+
+![image-20240621070216952](../images/关于pure-theme的一些tips/image-20240621070216952.png)
+
+全局搜索
+
+```
+ <%- toc(post.content) %>
+```
+
+改为
+
+```
+<%- toc(post.content, {list_number:false}) %>
+```
+
+新效果如下：
+
+![image-20240621070236824](../images/关于pure-theme的一些tips/image-20240621070236824.png)
