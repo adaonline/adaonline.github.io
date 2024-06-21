@@ -8,6 +8,10 @@ categories:
 toc: true # 是否启用内容索引
 ---
 
+参考资料:https://www.yuque.com/leifengyang/sutong/au0lv3sv3eldsmn8#uhW2Q
+
+视频：https://www.bilibili.com/video/BV1Zn4y1X7AZ
+
 # 1. docker安装
 
 官网安装流程：
@@ -658,4 +662,633 @@ RedisDesktopManager可以去github下载：https://github.com/lework/RedisDeskto
    mysql:8.0.37-debian
    ```
 
-   
+
+
+
+# 6. Dokcer Compose
+
+## 6.1 概述
+
+Docker Compose 是一个用于定义和运行多容器 Docker 应用的工具。通过使用一个叫做 `docker-compose.yml` 的配置文件，您可以配置应用所需的所有服务，然后通过一个简单的命令启动它们。
+
+1. 定义多容器应用：在一个`docker-compose.yml`文件中定义需要的所有服务
+2. 一键启动和停止：使用简单命令`docker compose up -d`(-d是后台启动) 启动所有服务，`docker compose down`停止并且清理服务
+3. 服务编排：自动处理容器之间依赖和启动顺序
+4. 共享网络：所有容器默认共享一个网络
+5. 持久化数据：使用卷保存数据
+
+```shell
+#后台启动
+docker compose up -d
+#停止并且清理服务
+docker compose down
+#重新启动配置的x1,x2,x3服务(这里是重新启动的意思，已经第一次启动过了)
+docker compose start x1 x2 x3
+#停止容器
+docker compose stop x1 x3
+#扩容,让x2启动三份
+docker compose scale x2=3
+```
+
+
+
+## 6.2 命令式安装一个wordpress博客
+
+创建共享网络
+
+```shell
+docker network create blog
+```
+
+启动mysql
+
+```shell
+#其中MYSQL_DATABASE为启动后默认创建数据库，/app/myconf为指定配置文件，--restart always指定开机默认启动
+docker run -d -p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=123456 \
+-e MYSQL_DATABASE=wordpress \
+-v mysql-data:/var/lib/mysql \
+-v /app/myconf:/etc/mysql/conf.d \
+--restart always --name mysql \
+--network blog \
+mysql:8.0
+```
+
+启动wordpress
+
+```shell
+# WORDPRESS开头环境变量指定对应的需求环境变量，-v wordpress指定卷，
+docker run -d -p 8080:80 \
+-e WORDPRESS_DB_HOST=mysql \
+-e WORDPRESS_DB_USER=root \
+-e WORDPRESS_DB_PASSWORD=123456 \
+-e WORDPRESS_DB_NAME=wordpress \
+-v wordpress:/var/www/html \
+--restart always --name wordpress-app \
+--network blog \
+wordpress:latest
+```
+
+记得开启对应端口防火墙
+
+这时候登录xxxxx:8080即可
+
+## 6.3 Dokcer Compose文件
+
+官方文档：https://docs.docker.com/reference/
+
+可以一次性编排整个需要的容器名字，配置项，启动项，文件，网络，服务等
+
+这下如果需要一次性生成上述的一个博客系统，就不需要每次去执行所有命令
+
+### 文件顶级元素
+
+```
+name:名字
+services:服务
+networks:网络
+volumes:卷
+configs:配置
+secrets:密钥
+```
+
+### 示例
+
+```yaml
+name: myblog 				#部署的应用名
+services:
+    mysql:
+        container_name: mysql
+        image: mysql:8.0 	#镜像
+        ports:				#端口,可能有多个端口，下面会用-开始，以下同理
+            - "3306:3306"
+        environment:		#环境变量
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_DATABASE=wordpress
+        volumes:			#卷
+            - mysql-data:/var/lib/mysql #卷挂载,要跨多个服务重用卷，必须在volumes顶级元素中声明命名卷
+            - /app/myconf:/etc/mysql/conf.d #目录挂载
+        restart: always
+        networks:
+            - blog
+    wordpress:
+        container_name: wordpress-app
+        image: wordpress
+        ports:
+            - "8080:80"
+        environment:
+            - WORDPRESS_DB_HOST=mysql
+            - WORDPRESS_DB_USER=root
+            - WORDPRESS_DB_PASSWORD=123456
+            - WORDPRESS_DB_NAME=wordpress
+        volumes:
+            - wordpress:/var/www/html    
+        restart: always
+        networks:
+            - blog
+        depends_on: #决定启动顺序，需要mysql先启动
+            mysql
+volumes:
+    mysql-data: #还可以配置卷详细信息
+    wordpress:
+networks:
+    blog:
+```
+
+使用命令删除之前的容器，网络，卷，保持环境干净，然后使用compose一次性操作
+
+```shell
+docker rm -f $(docker ps -aq)
+docker network rm blog
+docker volume rm mysql-data wordpress
+```
+
+执行命令
+
+```shell
+docker compose -f compose.yaml up -d
+```
+
+可能会有一些报错
+
+![image-20240621123112239](../images/docker快速入门/image-20240621123112239.png)
+
+可以看到网络名会变成`应用名-网络名`的格式，卷格式也`应用名-卷名`,如果没有给容器名，则会是`myblog-wordpress-1`的格式
+
+这时候重新去访问x.x.x.x:8080就是跟之前一样的内容了。
+
+![image-20240621123637212](../images/docker快速入门/image-20240621123637212.png)
+
+### 示例2
+
+我们将wordpress端口从`8080:80`改为`80:80`，去掉wordpress的container_name试试
+
+然后重新执行一次`docker compose -f compose.yaml up -d`
+
+![image-20240621124212173](../images/docker快速入门/image-20240621124212173.png)
+
+会发现，重新修改容器为80端口，重新启动了一个，并且名字变为了myblog-wordpress-1
+
+### 执行down命令
+
+```shell
+docker compose -f compose.yaml down
+```
+
+![image-20240621124449687](../images/docker快速入门/image-20240621124449687.png)
+
+发现移除了容器，移除了网络，但是其实并没有移除卷，这样下次启动，还可以使用同样的卷
+
+![image-20240621124522041](../images/docker快速入门/image-20240621124522041.png)
+
+其实也可以加上-v移除卷,--rmi 移除镜像
+
+```shell
+docker compose -f compose.yaml down --rmi all -v
+```
+
+![image-20240621124702365](../images/docker快速入门/image-20240621124702365.png)
+
+
+
+
+
+# 7. Dockerfile
+
+官方文档：https://docs.docker.com/reference/dockerfile/
+
+## 制作自己的镜像
+
+目的：构建自定义镜像，将自己的应用打包成一个镜像
+
+![image-20240621124935658](../images/docker快速入门/image-20240621124935658.png)
+
+1. 指定基础运行环境
+2. 需要的软件包
+3. 启动命令
+
+| 常见指令   | 作用                                                         |
+| ---------- | ------------------------------------------------------------ |
+| FROM       | 指定镜像基础环境                                             |
+| RUN        | 运行自定义命令                                               |
+| CMD        | 容器启动命令或者参数                                         |
+| LABEL      | 自定义标签                                                   |
+| EXPOSE     | 指定暴露端口，其实并不是真的发布端口，可以理解为一种约束文档<br>后续运行还是要通过-p真的去暴露端口 |
+| ENV        | 环境变量                                                     |
+| ADD        | 添加文件到镜像，可以自动解压缩，还可以远程下载文件并且复制   |
+| COPY       | 复制文件到镜像，只能复制本地的，不会解压缩                   |
+| ENTRYPOINT | 容器固定启动命令,数组类型是首选形式                          |
+| VOLUME     | 数据卷                                                       |
+| USER       | 指定用户和用户组                                             |
+| WORKDIR    | 指定默认工作目录                                             |
+| ARG        | 指定构建参数                                                 |
+
+下载参考资料中的app.jar，传到服务器
+
+编写dockerfile
+
+```dockerfile
+FROM openjdk:17
+LABEL author=simba
+COPY app.jar /app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","app.jar"]
+```
+
+保证dockerfile跟app.jar在同一目录,执行如下命令
+
+最后需要一个`.`,指定上下文目录，**这个点代表的是当前目录，很重要**
+
+```shell
+docker build -f Dockerfile -t myjavaapp:v1.0 .
+```
+
+这时候就在我们本地镜像就可以看到myjavaapp这个镜像了
+
+![image-20240621130934066](../images/docker快速入门/image-20240621130934066.png)
+
+```
+docker run -d -p 8888:8080 myjavaapp:v1.0
+```
+
+这时候就可以去访问x.x.x.x:8888,查看效果，会在网页打印“hello,world”，x.x.x.x为你服务器地址，记得放开8888端口
+
+## 制作一个python，fastapi镜像
+
+创建一个app镜像，目录内容如下
+
+```
+work
+├── Dockerfile
+└── app
+    └── main.py
+```
+
+其中main.py内容
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "hello, python-fastapi"}
+```
+
+Dockerfile内容如下(这里修改pip为清华源，可以加速下载)
+
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY ./app /app
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip config set global.trusted-host https://pypi.tuna.tsinghua.edu.cn
+RUN pip install fastapi uvicorn
+EXPOSE 8080
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+```
+
+确保在work目录下，执行如下命令构建镜像
+
+```shell
+docker build -t fastapi-app .
+```
+
+启动容器
+
+```
+docker run -d -p 8999:8080 --name myfastapi fastapi-app
+```
+
+![image-20240621140838039](../images/docker快速入门/image-20240621140838039.png)
+
+然后打开8999端口，访问x.x.x.x:8999就可以看到`{"message":"hello, python-fastapi"}`这个内容了。
+
+python没有打包的概念，所以这里直接是代码文件进去的。
+
+## 镜像分层存储机制
+
+docker存储镜像是分层存储的
+
+dockerfile每一个行指令都会产生一个存储层，因为每个层都会产生改变，文件，环境等等。这样的好处是减轻磁盘存储压力
+
+![image-20240621141050025](../images/docker快速入门/image-20240621141050025.png)
+
+如下，app1和app2共用了底层，然后增量存储自己要的东西。
+
+![image-20240621141100369](../images/docker快速入门/image-20240621141100369.png)
+
+可以查看我们的mynginx:v1.0与nginx的区别，可以看到mynginx与nginx只有1.32kb的区别
+
+![image-20240621141332027](../images/docker快速入门/image-20240621141332027.png)
+
+也可以用docker image imspect查看两个镜像的存储内容。
+
+镜像存储内容是R/O，是只读的，容器启动会单独开一次，R/W的可读可写，容器修改数据只会在自己的层。所以容器修改的数据在删除后就不存在了
+
+![image-20240621141523103](../images/docker快速入门/image-20240621141523103.png)
+
+每个容器都有自己的R/W层，互不相干，然后又有可能引用同样的镜像存储层。推荐修改的数据挂载到外部
+
+![image-20240621141633278](../images/docker快速入门/image-20240621141633278.png)
+
+使用如下命令,可以查看对应容器消耗的存储
+
+```shell
+docker ps -s
+```
+
+![image-20240621142007318](../images/docker快速入门/image-20240621142007318.png)
+
+# 8. 一键启动
+
+![image-20240621142108582](../images/docker快速入门/image-20240621142108582.png)
+
+一次启动如上所有容器(其中的x.x.x.x改成自己的服务器地址即可)
+
+```yaml
+name: devsoft
+services:
+  redis:
+    image: bitnami/redis:latest
+    restart: always
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=123456
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/bitnami/redis/data
+      - redis-conf:/opt/bitnami/redis/mounted-etc
+      - /etc/localtime:/etc/localtime:ro
+
+  mysql:
+    image: mysql:8.0.31
+    restart: always
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - '3306:3306'
+      - '33060:33060'
+    volumes:
+      - mysql-conf:/etc/mysql/conf.d
+      - mysql-data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+
+  rabbit:
+    image: rabbitmq:3-management
+    restart: always
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=rabbit
+      - RABBITMQ_DEFAULT_VHOST=dev
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
+      - rabbit-app:/etc/rabbitmq
+      - /etc/localtime:/etc/localtime:ro
+  opensearch-node1:
+    image: opensearchproject/opensearch:2.13.0
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster # Name the cluster
+      - node.name=opensearch-node1 # Name the node that will run in this container
+      - discovery.seed_hosts=opensearch-node1,opensearch-node2 # Nodes to look for when discovering the cluster
+      - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2 # Nodes eligibile to serve as cluster manager
+      - bootstrap.memory_lock=true # Disable JVM heap memory swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # Set min and max JVM heap sizes to at least 50% of system RAM
+      - "DISABLE_INSTALL_DEMO_CONFIG=true" # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=true" # Disables Security plugin
+    ulimits:
+      memlock:
+        soft: -1 # Set memlock to unlimited (no soft or hard limit)
+        hard: -1
+      nofile:
+        soft: 65536 # Maximum number of open files for the opensearch user - set to at least 65536
+        hard: 65536
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9200:9200 # REST API
+      - 9600:9600 # Performance Analyzer
+
+  opensearch-node2:
+    image: opensearchproject/opensearch:2.13.0
+    container_name: opensearch-node2
+    environment:
+      - cluster.name=opensearch-cluster # Name the cluster
+      - node.name=opensearch-node2 # Name the node that will run in this container
+      - discovery.seed_hosts=opensearch-node1,opensearch-node2 # Nodes to look for when discovering the cluster
+      - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2 # Nodes eligibile to serve as cluster manager
+      - bootstrap.memory_lock=true # Disable JVM heap memory swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # Set min and max JVM heap sizes to at least 50% of system RAM
+      - "DISABLE_INSTALL_DEMO_CONFIG=true" # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=true" # Disables Security plugin
+    ulimits:
+      memlock:
+        soft: -1 # Set memlock to unlimited (no soft or hard limit)
+        hard: -1
+      nofile:
+        soft: 65536 # Maximum number of open files for the opensearch user - set to at least 65536
+        hard: 65536
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - opensearch-data2:/usr/share/opensearch/data # Creates volume called opensearch-data2 and mounts it to the container
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.13.0
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601 # Map host port 5601 to container port 5601
+    expose:
+      - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200","http://opensearch-node2:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+  zookeeper:
+    image: bitnami/zookeeper:3.9
+    container_name: zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: 'bitnami/kafka:3.4'
+    container_name: kafka
+    restart: always
+    hostname: kafka
+    ports:
+      - '9092:9092'
+      - '9094:9094'
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://x.x.x.x:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - "KAFKA_HEAP_OPTS=-Xmx512m -Xms512m"
+    volumes:
+      - kafka-conf:/bitnami/kafka/config
+      - kafka-data:/bitnami/kafka/data
+      - /etc/localtime:/etc/localtime:ro
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+      KAFKA_CLUSTERS_0_NAME: kafka-dev
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    volumes:
+      - kafkaui-app:/etc/kafkaui
+      - /etc/localtime:/etc/localtime:ro
+
+  nacos:
+    image: nacos/nacos-server:v2.3.1
+    container_name: nacos
+    ports:
+      - 8848:8848
+      - 9848:9848
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - JVM_XMX=512m
+      - JVM_XMS=512m
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=nacos-mysql
+      - MYSQL_SERVICE_DB_NAME=nacos_devtest
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=nacos
+      - MYSQL_SERVICE_PASSWORD=nacos
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      - NACOS_AUTH_IDENTITY_KEY=2222
+      - NACOS_AUTH_IDENTITY_VALUE=2xxx
+      - NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789
+      - NACOS_AUTH_ENABLE=true
+    volumes:
+      - /app/nacos/standalone-logs/:/home/nacos/logs
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      nacos-mysql:
+        condition: service_healthy
+  nacos-mysql:
+    container_name: nacos-mysql
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM mysql:8.0.31
+        ADD https://raw.githubusercontent.com/alibaba/nacos/2.3.2/distribution/conf/mysql-schema.sql /docker-entrypoint-initdb.d/nacos-mysql.sql
+        RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/nacos-mysql.sql
+        EXPOSE 3306
+        CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    image: nacos/mysql:8.0.30
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=nacos_devtest
+      - MYSQL_USER=nacos
+      - MYSQL_PASSWORD=nacos
+      - LANG=C.UTF-8
+    volumes:
+      - nacos-mysqldata:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "13306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - prometheus-data:/prometheus
+      - prometheus-conf:/etc/prometheus
+      - /etc/localtime:/etc/localtime:ro
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: grafana
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - /etc/localtime:/etc/localtime:ro
+
+volumes:
+  redis-data:
+  redis-conf:
+  mysql-conf:
+  mysql-data:
+  rabbit-data:
+  rabbit-app:
+  opensearch-data1:
+  opensearch-data2:
+  nacos-mysqldata:
+  zookeeper_data:
+  kafka-conf:
+  kafka-data:
+  kafkaui-app:
+  prometheus-data:
+  prometheus-conf:
+  grafana-data:
+```
+
+删除之前所有镜像还有卷
+
+```shell
+docker rm -f $(docker ps -aq)
+docker volume rm $(docker volume ls -q)
+```
+
+opensearch需要增大内存映射数目,执行一下下面的内容
+
+```shell
+#Disable memory paging and swapping performance 关闭内存分页
+sudo swapoff -a
+
+# Edit the sysctl config file
+sudo vi /etc/sysctl.conf
+
+# Add a line to define the desired value
+# or change the value if the key exists,
+# and then save your changes.修改内存最大映射数
+vm.max_map_count=262144
+
+# Reload the kernel parameters using sysctl 使用配置生效
+sudo sysctl -p
+
+# Verify that the change was applied by checking the value
+cat /proc/sys/vm/max_map_count
+```
+
+编辑好compose.yaml文件后，执行
+
+```
+docker compose up -d
+```
+
+需要比较高性能服务器。
+
