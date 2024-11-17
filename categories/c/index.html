@@ -17,21 +17,18 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>c++经典tips | Simba</title>
-  <meta name="description" content="常量指针、指针常量、常量指针常量在 C++ 中，常量指针（const pointer）、指针常量（constant pointer）和常量指针常量（constant pointer to constant）是三种不同的概念。它们涉及指针和常量修饰符的组合方式 1. 常量指针（const pointer）常量指针是指指针本身是常量的，意味着指针的值（即存储的地址）不可更改，但指针指向的数据是可以修改">
-<meta property="og:type" content="article">
-<meta property="og:title" content="c++经典tips">
-<meta property="og:url" content="https://adaonline.github.io/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html">
+  <title>分类: c++ | Simba</title>
+  <meta name="description" content="走进你的梦">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simba的小站">
+<meta property="og:url" content="https://adaonline.github.io/categories/c/index.html">
 <meta property="og:site_name" content="Simba的小站">
-<meta property="og:description" content="常量指针、指针常量、常量指针常量在 C++ 中，常量指针（const pointer）、指针常量（constant pointer）和常量指针常量（constant pointer to constant）是三种不同的概念。它们涉及指针和常量修饰符的组合方式 1. 常量指针（const pointer）常量指针是指指针本身是常量的，意味着指针的值（即存储的地址）不可更改，但指针指向的数据是可以修改">
+<meta property="og:description" content="走进你的梦">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-11-17T19:43:44.000Z">
-<meta property="article:modified_time" content="2024-11-17T19:47:33.723Z">
 <meta property="article:author" content="Simba">
-<meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://adaonline.github.io/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html">
+  <link rel="canonical" href="https://adaonline.github.io/categories/c/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Simba的小站" type="application/atom+xml">
   
@@ -211,7 +208,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">4</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -256,10 +253,10 @@
             
             <div class="item-inner">
               <p class="item-category">
-                
+                <a class="category-link" href="/categories/c/">c++</a>
               </p>
               <p class="item-title">
-                <a href="/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html" class="title">c++经典tips</a>
+                <a href="/2024-11-18-c++%E7%BB%8F%E5%85%B8tips.html" class="title">c++经典tips</a>
               </p>
               <p class="item-date">
                 <time datetime="2024-11-17T19:43:44.000Z" itemprop="datePublished">2024-11-18</time>
@@ -337,144 +334,59 @@
 </aside>
 
   
-  
-  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    <nav id="toc" class="article-toc">
-      <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E3%80%81%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E3%80%81%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F"><span class="toc-text">常量指针、指针常量、常量指针常量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%EF%BC%88const-pointer%EF%BC%89"><span class="toc-text">1. 常量指针（const pointer）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%EF%BC%88constant-pointer%EF%BC%89"><span class="toc-text">2. 指针常量（constant pointer）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%EF%BC%88constant-pointer-to-constant%EF%BC%89"><span class="toc-text">3. 常量指针常量（constant pointer to constant）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
-    </nav>
-  </div>
-</aside>
-
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-c-经典tips" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      c++经典tips
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html" class="article-date">
-	  <time datetime="2024-11-17T19:43:44.000Z" itemprop="datePublished">2024-11-18</time>
-	</a>
-</span>
-        
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/c/" rel="tag">c++</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html#comments" class="article-comment-link">评论</a></span>
-        
-      </div>
+  <main class="main" role="main">
+  <article class="content article article-categories article-type-list" itemscope="">
+    <header class="article-header">
+      <h1 itemprop="name" class="hidden-xs">分类: c++</h1>
+      <p class="hidden-xs">共 1 篇文章</p>
+      <nav role="navigation" id="nav-main" class="okayNav">
+        <ul>
+          <li><a href="/categories">All</a></li>
+          
+          <li><a href="/categories/hexo/">hexo</a></li>
+          
+          <li><a href="/categories/docker/">docker</a></li>
+          
+          <li><a href="/categories/go/">go</a></li>
+          
+          <li><a href="/categories/git/">git</a></li>
+          
+          <li><a href="/categories/c/">c++</a></li>
+          
+        </ul>
+      </nav>
+    </header>
+    <!-- /header -->
+    <div class="article-body">
+      <div class="panel panel-default b-no">
+    <div class="panel-heading" role="tab">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapsec++" aria-expanded="true">
+              <i class="icon icon-folder text-active"></i><i class="icon icon-folder-open text"></i>
+              c++
+            </a>
+            <small class="text-muted">(Total 1 articles)</small>
+        </h4>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h3 id="常量指针、指针常量、常量指针常量"><a href="#常量指针、指针常量、常量指针常量" class="headerlink" title="常量指针、指针常量、常量指针常量"></a>常量指针、指针常量、常量指针常量</h3><p>在 C++ 中，常量指针（<code>const pointer</code>）、指针常量（<code>constant pointer</code>）和常量指针常量（<code>constant pointer to constant</code>）是三种不同的概念。它们涉及指针和常量修饰符的组合方式</p>
-<h4 id="1-常量指针（const-pointer）"><a href="#1-常量指针（const-pointer）" class="headerlink" title="1. 常量指针（const pointer）"></a>1. 常量指针（<code>const pointer</code>）</h4><p>常量指针是指指针本身是常量的，意味着指针的值（即存储的地址）不可更改，但指针指向的数据是可以修改的。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> b = <span class="number">20</span>;</span><br><span class="line"><span class="type">int</span> *<span class="type">const</span> ptr = &amp;a;  <span class="comment">// ptr 是常量指针</span></span><br><span class="line"></span><br><span class="line">ptr = &amp;b;  <span class="comment">// 错误：ptr 是常量指针，不能更改指向的地址</span></span><br><span class="line">*ptr = <span class="number">30</span>;  <span class="comment">// 正确：可以修改 ptr 指向的内容</span></span><br></pre></td></tr></table></figure>
+    <div id="collapsec++" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingc++">
+        <div class="panel-body">
+            <div class="collection">
+              
+                
+<a href="/2024-11-18-c++%E7%BB%8F%E5%85%B8tips.html" class="collection-item"   itemprop="url">
+  <time datetime="2024-11-17T19:43:44.000Z" itemprop="datePublished">2024-11-18</time>
+  <span>&nbsp;&nbsp;&nbsp;</span> c++经典tips
+</a>
 
-<ul>
-<li><p><code>*const ptr</code> 说明 <code>ptr</code> 是常量指针（即指针值不可修改）。</p>
-</li>
-<li><p>但是 <code>*ptr</code> 允许修改指针所指向的对象。</p>
-</li>
-</ul>
-<h4 id="2-指针常量（constant-pointer）"><a href="#2-指针常量（constant-pointer）" class="headerlink" title="2. 指针常量（constant pointer）"></a>2. 指针常量（<code>constant pointer</code>）</h4><p>指针常量是指指针指向的内容是常量的，意味着指针指向的数据不可更改，但指针本身可以重新指向不同的地址。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> b = <span class="number">20</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> *ptr = &amp;a;  <span class="comment">// ptr 是指针常量</span></span><br><span class="line"></span><br><span class="line">ptr = &amp;b;  <span class="comment">// 正确：ptr 可以指向不同的地址</span></span><br><span class="line">*ptr = <span class="number">30</span>;  <span class="comment">// 错误：ptr 指向的内容是常量，不能修改</span></span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><p><code>const int *ptr</code> 说明 <code>ptr</code> 是指向常量的指针。</p>
-</li>
-<li><p><code>ptr</code> 可以改变它指向的地址，但是不能修改它指向的内容。</p>
-</li>
-</ul>
-<h4 id="3-常量指针常量（constant-pointer-to-constant）"><a href="#3-常量指针常量（constant-pointer-to-constant）" class="headerlink" title="3. 常量指针常量（constant pointer to constant）"></a>3. 常量指针常量（<code>constant pointer to constant</code>）</h4><p>常量指针常量是指指针本身和指针指向的内容都不能更改，既不能改变指针的值，也不能修改指针所指向的内容。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> b = <span class="number">20</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> *<span class="type">const</span> ptr = &amp;a;  <span class="comment">// ptr 是常量指针常量</span></span><br><span class="line"></span><br><span class="line">ptr = &amp;b;  <span class="comment">// 错误：ptr 是常量指针，不能更改指向的地址</span></span><br><span class="line">*ptr = <span class="number">30</span>;  <span class="comment">// 错误：ptr 指向的内容是常量，不能修改</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><code>const int *const ptr</code> 说明 <code>ptr</code> 是指向常量的常量指针。</p>
-</li>
-<li><p>既不能改变 <code>ptr</code> 指向的地址，也不能修改它指向的内容。</p>
-</li>
-</ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
-<li><p><strong>常量指针</strong>（<code>int *const ptr</code>）：指针的地址不可修改，但指向的数据可以修改。</p>
-</li>
-<li><p><strong>指针常量</strong>（<code>const int *ptr</code> 或 <code>int const *ptr</code>）：指针可以修改指向的地址，但指向的数据不可修改。</p>
-</li>
-<li><p><strong>常量指针常量</strong>（<code>const int *const ptr</code>）：指针的地址和指向的数据都不可修改。</p>
-</li>
-</ol>
-
-      
+              
+            </div>
+        </div>
     </div>
-    <div class="article-footer">
-      <!-- 新增总配置，不显示底部的声明 -->
-
-  
-  
+</div>
     </div>
   </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    
-    <li class="next">
-      <a href="/2024-06-18-docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html" title="docker快速入门"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
-    
-    
-    <li class="toggle-toc">
-      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
-        <i class="text-collapsed icon icon-anchor"></i>
-        <i class="text-in icon icon-close"></i>
-        <span>]</span>
-      </a>
-    </li>
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,wechat"></div>
-    
-  </div>
-  </div>
-</nav>
-  
-
-
+   
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -527,37 +439,6 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
-
-   
-
-
-
-
-   
-    
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
 
 
 
