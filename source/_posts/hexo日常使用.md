@@ -13,6 +13,9 @@ categories:
 
 - window安装
   https://nodejs.org/en
+  
+  推荐使用nvm管理nodejs:[**[nvm-windows](https://github.com/coreybutler/nvm-windows)**](https://github.com/coreybutler/nvm-windows)
+  
 - linux安装
 
   ```shell
@@ -46,9 +49,56 @@ categories:
   sudo n stable
   ```
 
-### 本地部署
+### 安装hexo
 
 ```shell
+$ npm install -g hexo-cli
+```
+
+### 初始化一个hexo项目
+
+```bash
+$ hexo init <folder>
+$ cd <folder>
+$ npm install
+```
+
+创建完成后的目录为
+
+```text
+.
+├── .github
+├── node_modules
+├── scaffolds
+├── source
+	└── _posts
+		└── hello-world.md
+├── themes
+├── .gitignore
+├── package-lock.json
+├── package.json
+└── _config.landscape.yml
+```
+
+### 开始写作
+
+```bash
+$ hexo new [layout] "你的文章标题"
+```
+
+layout是布局，可以暂时忽略，如果指定了布局，hexo会到scaffolds文件夹下找，这些布局会被一些主体用到
+
+```bash
+$ hexo new "My Gallery"
+```
+
+会创建一个My Gallery标题的文章储存到 `source/_posts` 文件夹
+
+编辑_posts文件夹下的md文件，然后部署就可以看到效果了
+
+### 本地部署
+
+```bash
 $ hexo clean #清除缓存
 $ hexo g #生成静态文件
 $ hexo s #部署运营
@@ -66,17 +116,19 @@ deploy:
 
 部署命令
 
-```shell
+```bash
 $ hexo deploy
 或者
 $ hexo d
 ```
 
-### 创建新文章
+### 从github拉取
 
-```bash
-$ hexo new "你的文章标题"
-```
+在.gitignore指定了不上传node_modules
+
+如果是异地拉取这个仓库，需要初始化hexo环境，要不然会提示hexo各种报错
+
+需要nodejs环境，并且安装了hexo，在库目录下执行npm install即可
 
 ### 测试图片
 
