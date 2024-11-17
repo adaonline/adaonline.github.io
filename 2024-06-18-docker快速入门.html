@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>docker快速入门 | Simba</title>
+  <meta name="description" content="参考资料:https:&#x2F;&#x2F;www.yuque.com&#x2F;leifengyang&#x2F;sutong&#x2F;au0lv3sv3eldsmn8#uhW2Q 视频：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1Zn4y1X7AZ 1. docker安装官网安装流程： https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;install&#x2F;centos&#x2F; 123456789101112131">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker快速入门">
+<meta property="og:url" content="https://adaonline.github.io/2024-06-18-docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html">
+<meta property="og:site_name" content="Simba的小站">
+<meta property="og:description" content="参考资料:https:&#x2F;&#x2F;www.yuque.com&#x2F;leifengyang&#x2F;sutong&#x2F;au0lv3sv3eldsmn8#uhW2Q 视频：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1Zn4y1X7AZ 1. docker安装官网安装流程： https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;install&#x2F;centos&#x2F; 123456789101112131">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618233726317.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618234925427.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618235226062.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619004837274.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619004935789.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619005242985.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619005826291.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619012836999.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619013812602.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619014859547.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619014955436.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015136884.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015355235.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015521837.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015744062.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619020043766.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619021130689.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619021902030.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619022025972.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619235400130.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620002115594.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620002615246.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620003203217.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620003845726.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620004708550.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620004936495.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620005135433.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620011430368.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620011940898.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620014200299.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620022106280.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620022244815.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620022320865.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621123112239.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621123637212.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124212173.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124449687.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124522041.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124702365.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124935658.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621130934066.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621140838039.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141050025.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141100369.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141332027.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141523103.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141633278.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621142007318.png">
+<meta property="og:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621142108582.png">
+<meta property="article:published_time" content="2024-06-18T15:17:44.000Z">
+<meta property="article:modified_time" content="2024-11-17T19:16:27.300Z">
+<meta property="article:author" content="Simba">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://adaonline.github.io/images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618233726317.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://adaonline.github.io/2024-06-18-docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Simba的小站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/adaonline" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Simba</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> GuangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/adaonline" target="_blank" title="Github" ><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/c/" style="font-size: 13px;">c++</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/go/" style="font-size: 13px;">go</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/11/">十一月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html" class="title">c++经典tips</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-11-17T19:43:44.000Z" itemprop="datePublished">2024-11-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/docker/">docker</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024-06-18-docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html" class="title">docker快速入门</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-18T15:17:44.000Z" itemprop="datePublished">2024-06-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/go/">go</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024-06-14-go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E9%80%9A%E4%BF%A1%E7%B3%BB%E7%BB%9F.html" class="title">go语言实现通信系统</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-13T17:26:14.000Z" itemprop="datePublished">2024-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/hexo/">hexo</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024-06-13-windows%E7%9B%B8%E5%85%B3typora%E8%AE%BE%E7%BD%AE.html" class="title">windows相关typora设置</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-12T18:04:14.000Z" itemprop="datePublished">2024-06-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/git/">git</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024-06-13-%E9%85%8D%E7%BD%AE%E5%90%8C%E6%97%B6%E4%BD%BF%E7%94%A8-Gitlab%E3%80%81Github%E3%80%81Gitee%E5%85%B1%E5%AD%98%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83.html" class="title">配置同时使用 Gitlab、Github、Gitee共存的开发环境</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-12T17:58:53.000Z" itemprop="datePublished">2024-06-13</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-docker%E5%AE%89%E8%A3%85"><span class="toc-text">1. docker安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="toc-text">2. 常见命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E9%95%9C%E5%83%8F"><span class="toc-text">2.1 下载镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8"><span class="toc-text">2.2 启动容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">启动命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%90%AF%E5%8A%A8"><span class="toc-text">重新启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2%E5%AE%B9%E5%99%A8"><span class="toc-text">停止容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AF"><span class="toc-text">重启</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%8A%B6%E6%80%81"><span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8%E6%97%A5%E5%BF%97"><span class="toc-text">查看容器日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%AE%B9%E5%99%A8"><span class="toc-text">删除容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E5%90%AF%E5%8A%A8"><span class="toc-text">后台启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="toc-text">端口映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5%E5%AE%B9%E5%99%A8"><span class="toc-text">进入容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E4%BF%AE%E6%94%B9%E9%A1%B5%E9%9D%A2"><span class="toc-text">2.3 修改页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E4%BF%9D%E5%AD%98%E5%88%86%E4%BA%AB%E9%95%9C%E5%83%8F"><span class="toc-text">2.4 保存分享镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E5%AE%B9%E5%99%A8%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F"><span class="toc-text">用容器生成镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E9%95%9C%E5%83%8F%E5%88%B0%E6%96%87%E4%BB%B6"><span class="toc-text">保存镜像到文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text">使用镜像文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E4%BA%AB%E9%95%9C%E5%83%8F"><span class="toc-text">分享镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95"><span class="toc-text">登录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E5%90%8D"><span class="toc-text">命名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A8%E9%80%81-%E5%9B%BD%E5%86%85%E5%8F%AF%E8%83%BD%E4%BC%9Atimeout"><span class="toc-text">推送(国内可能会timeout)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93"><span class="toc-text">2.5 命令总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%AD%98%E5%82%A8-%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%EF%BC%8C%E5%8D%B7%E6%98%A0%E5%B0%84"><span class="toc-text">3. 存储(目录挂载，卷映射)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD"><span class="toc-text">3.1 目录挂载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%8D%B7%E6%98%A0%E5%B0%84"><span class="toc-text">3.2 卷映射</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%8D%B7%E6%98%A0%E5%B0%84%E7%9A%84%E7%9B%AE%E5%BD%95%E5%86%85%E5%AE%B9"><span class="toc-text">修改卷映射的目录内容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%80%BB%E7%BB%93"><span class="toc-text">3.3 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E7%BD%91%E7%BB%9C"><span class="toc-text">4. 网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%B9%E5%99%A8%E8%AE%BF%E9%97%AE%E5%AE%B9%E5%99%A8"><span class="toc-text">4.1 容器访问容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE%E5%9B%BA%E5%AE%9A"><span class="toc-text">4.2 网络访问固定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%80%BB%E7%BB%93"><span class="toc-text">4.3 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E5%AE%9E%E8%B7%B5"><span class="toc-text">5. 网络实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E9%9B%86%E7%BE%A4"><span class="toc-text">5.1 Redis主从复制集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%8E%AF%E5%A2%83%EF%BC%8C%E5%BC%80%E5%90%AF%E5%AE%B9%E5%99%A8"><span class="toc-text">初始化环境，开启容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-text">验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Dokcer-Compose"><span class="toc-text">6. Dokcer Compose</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E6%A6%82%E8%BF%B0"><span class="toc-text">6.1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%91%BD%E4%BB%A4%E5%BC%8F%E5%AE%89%E8%A3%85%E4%B8%80%E4%B8%AAwordpress%E5%8D%9A%E5%AE%A2"><span class="toc-text">6.2 命令式安装一个wordpress博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Dokcer-Compose%E6%96%87%E4%BB%B6"><span class="toc-text">6.3 Dokcer Compose文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E9%A1%B6%E7%BA%A7%E5%85%83%E7%B4%A0"><span class="toc-text">文件顶级元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B2"><span class="toc-text">示例2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8Cdown%E5%91%BD%E4%BB%A4"><span class="toc-text">执行down命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Dockerfile"><span class="toc-text">7. Dockerfile</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84%E9%95%9C%E5%83%8F"><span class="toc-text">制作自己的镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AApython%EF%BC%8Cfastapi%E9%95%9C%E5%83%8F"><span class="toc-text">制作一个python，fastapi镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E5%88%86%E5%B1%82%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6"><span class="toc-text">镜像分层存储机制</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8"><span class="toc-text">8. 一键启动</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-docker快速入门" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      docker快速入门
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024-06-18-docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html" class="article-date">
+	  <time datetime="2024-06-18T15:17:44.000Z" itemprop="datePublished">2024-06-18</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/docker/" rel="tag">docker</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024-06-18-docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>参考资料:<a target="_blank" rel="noopener" href="https://www.yuque.com/leifengyang/sutong/au0lv3sv3eldsmn8#uhW2Q">https://www.yuque.com/leifengyang/sutong/au0lv3sv3eldsmn8#uhW2Q</a></p>
+<p>视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Zn4y1X7AZ">https://www.bilibili.com/video/BV1Zn4y1X7AZ</a></p>
+<h1 id="1-docker安装"><a href="#1-docker安装" class="headerlink" title="1. docker安装"></a>1. docker安装</h1><p>官网安装流程：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">移除旧版本docker</span></span><br><span class="line">sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置docker yum源。这里修改为对应的阿里云源，更快</span></span><br><span class="line">sudo yum install -y yum-utils</span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">--add-repo \</span><br><span class="line">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 最新 docker</span></span><br><span class="line">sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动docker</span></span><br><span class="line">sudo systemctl start docker</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以使用docker命令，展示镜像</span></span><br><span class="line">docker ps</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动&amp; 开机启动docker； <span class="built_in">enable</span> + start 二合一</span></span><br><span class="line">systemctl enable docker --now</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置加速，默认去dockerhub的，可以配置国内镜像加速</span></span><br><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">    &quot;registry-mirrors&quot;: [</span><br><span class="line">        &quot;https://hub.uuuadc.top&quot;,</span><br><span class="line">        &quot;https://docker.anyhub.us.kg&quot;,</span><br><span class="line">        &quot;https://dockerhub.jobcher.com&quot;,</span><br><span class="line">        &quot;https://dockerhub.icu&quot;,</span><br><span class="line">        &quot;https://docker.ckyl.me&quot;,</span><br><span class="line">        &quot;https://docker.awsl9527.cn&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通知 systemd 重新加载其配置文件的命令</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启docker应用更改</span></span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>dcoker-ce 就是docker引擎</p>
+<p>docker-ce-cli 引擎的命令行程序</p>
+<p>containerd.io 运行时环境</p>
+<p>docker-buildx-plugin 构建镜像工具</p>
+<p>docker-compose-plugin 批量工具</p>
+<h1 id="2-常见命令"><a href="#2-常见命令" class="headerlink" title="2. 常见命令"></a>2. 常见命令</h1><h2 id="2-1-下载镜像"><a href="#2-1-下载镜像" class="headerlink" title="2.1 下载镜像"></a>2.1 下载镜像</h2><p>相关命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker search nginx #检索镜像</span><br><span class="line">docker pull nginx#下载镜像</span><br><span class="line">docker images #查看本地镜像列表</span><br><span class="line">docker rmi #删除镜像</span><br></pre></td></tr></table></figure>
+
+<p>docker search nginx </p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618233726317.png" alt="image-20240618233726317"></p>
+<p>name为镜像名称，description为描述，stars为镜像的star数目，offical为是否官方</p>
+<p>docker pull nginx</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618234925427.png" alt="image-20240618234925427"></p>
+<p>docker images(repository镜像标签 tag 镜像版本 image id 镜像id)</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240618235226062.png" alt="image-20240618235226062"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">镜像名其实完成名称格式为</span><br><span class="line">镜像名：标签(版本)</span><br><span class="line">下载1.26版本为</span><br><span class="line">docker pull nginx:1.26.0</span><br></pre></td></tr></table></figure>
+
+<p>docker rmi nginx:1.26.0</p>
+<p>记得加上完整名字</p>
+<h2 id="2-2-启动容器"><a href="#2-2-启动容器" class="headerlink" title="2.2 启动容器"></a>2.2 启动容器</h2><h3 id="启动命令"><a href="#启动命令" class="headerlink" title="启动命令"></a>启动命令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run nginx #这里会阻塞命令行，后台启动在下文</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619004837274.png" alt="image-20240619004837274"></p>
+<p>换一个窗口用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">CONTAINER ID 应用id</span><br><span class="line">IMAGE 镜像名称</span><br><span class="line">COMMAND 启动命令</span><br><span class="line">CREATED 启动时间</span><br><span class="line">STATUS 启动多长 up代表成功</span><br><span class="line">PORTS 占用端口</span><br><span class="line">NAMES 随机名</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619004935789.png" alt="image-20240619004935789"></p>
+<p>在原本窗口停ctrl+c停止后，会发现docker ps不会显示有容器启动</p>
+<p>如果用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">会显示所有容器，包括停止的</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619005242985.png" alt="image-20240619005242985"></p>
+<h3 id="重新启动"><a href="#重新启动" class="headerlink" title="重新启动"></a>重新启动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start ec2 #使用容器id重新启动，可以只使用前几位id，用来与别的容器区分即可，就会发现重新启动起来了</span><br><span class="line">docker start ecstatic_tesla #也可以使用容器名</span><br></pre></td></tr></table></figure>
+
+<h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop ecstatic_tesla #也可以使用容器名</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart (id或者应用名)</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker stats ec2 #用容器名也可以，以下同上</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">显示也是动态变化的，跟top命令差不多</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619005826291.png" alt="image-20240619005826291"></p>
+<h3 id="查看容器日志"><a href="#查看容器日志" class="headerlink" title="查看容器日志"></a>查看容器日志</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs ec2</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm ec2 #运行中的容器会提示你需要先停止，或者用 force remove 就是加上 -f 命令行参数</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619012836999.png" alt="image-20240619012836999"></p>
+<h3 id="后台启动"><a href="#后台启动" class="headerlink" title="后台启动"></a>后台启动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name mynginx nginx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">-d指定后台启动</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">mynginx指定名字，要不然会随机名字</span></span><br></pre></td></tr></table></figure>
+
+<p>这时候虽然用docker ps查看虽然还是占用80端口，但是暂时还是不能访问，占用的是容器系统的80端口</p>
+<h3 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h3><p>端口映射，宿主机的端口都是独立冲突的，容器的端口可以重复，因为互相不影响</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">可以先将之前的容器删除掉，启动重名会提示冲突</span></span><br><span class="line">docker run -d --name mynginx -p 80:80 nginx </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">这里-p指定端口映射，前面的是宿主机，后面的是容器端口</span></span><br><span class="line">启动后docker ps查看</span><br><span class="line">这里ports展示了对应的映射关系，如果是云主机，记得在安全规则开启80端口</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619013812602.png" alt="image-20240619013812602"></p>
+<h3 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h3><p>为后续修改容器内容做准备</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it mynginx /bin/bash</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">-it交互模式进入容器</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">mynginx 容器名</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">交互方式 /bin/bash</span></span><br><span class="line">容器有自己的文件系统</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619014859547.png" alt="image-20240619014859547"></p>
+<h2 id="2-3-修改页面"><a href="#2-3-修改页面" class="headerlink" title="2.3 修改页面"></a>2.3 修改页面</h2><p>nginx静态页面地址在</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/nginx/html</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619014955436.png" alt="image-20240619014955436"></p>
+<p>容器为了保持轻量化，是很多工具都没有安装的，先修改页面内容，后续可以映射docker存储到外部，可以不用总是进入容器修改</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015136884.png" alt="image-20240619015136884"></p>
+<p>重新访问服务器80端口（提前做好映射），就可以发现已经改动完成</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015355235.png" alt="image-20240619015355235"></p>
+<h2 id="2-4-保存分享镜像"><a href="#2-4-保存分享镜像" class="headerlink" title="2.4 保存分享镜像"></a>2.4 保存分享镜像</h2><h3 id="用容器生成镜像"><a href="#用容器生成镜像" class="headerlink" title="用容器生成镜像"></a>用容器生成镜像</h3><p>可以使用docker commit命令</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015521837.png" alt="image-20240619015521837"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">docker commit 容器名或者<span class="built_in">id</span> 镜像</span></span><br><span class="line">docker commit -m &quot;update index&quot; mynginx mynginx:v1.0</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">执行完后查看镜像列表就有了我们自己创建的镜像</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619015744062.png" alt="image-20240619015744062"></p>
+<h3 id="保存镜像到文件"><a href="#保存镜像到文件" class="headerlink" title="保存镜像到文件"></a>保存镜像到文件</h3><p>可以使用docker save命令，-o可以指定输出到什么文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save -o mynginx.tar mynginx:v1.0</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619020043766.png" alt="image-20240619020043766"></p>
+<h3 id="使用镜像文件"><a href="#使用镜像文件" class="headerlink" title="使用镜像文件"></a>使用镜像文件</h3><p>可以先删除本机所有镜像和容器</p>
+<p>加载mynginx.tar </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker load -i mynginx.tar</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619021130689.png" alt="image-20240619021130689"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">重新启动容器,执行完后可以发现就是刚才自己修改的内容</span></span><br><span class="line">docker run -d --name mynginx -p 80:80 mynginx:v1.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="分享镜像"><a href="#分享镜像" class="headerlink" title="分享镜像"></a>分享镜像</h3><h4 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h4><p><a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a></p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619021902030.png" alt="image-20240619021902030"></p>
+<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h4><p>先给镜像改名，需要（用户名&#x2F;镜像名）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag mynginx:v1.0 simbaada/mynginx:v1.0</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619022025972.png" alt="image-20240619022025972"></p>
+<h4 id="推送-国内可能会timeout"><a href="#推送-国内可能会timeout" class="headerlink" title="推送(国内可能会timeout)"></a>推送(国内可能会timeout)</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push simbaada/mynginx:v1.0</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-5-命令总结"><a href="#2-5-命令总结" class="headerlink" title="2.5 命令总结"></a>2.5 命令总结</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看运行中的容器</span></span><br><span class="line">docker ps</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看所有容器</span></span><br><span class="line">docker ps -a</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">搜索镜像</span></span><br><span class="line">docker search nginx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">下载镜像</span></span><br><span class="line">docker pull nginx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">下载指定版本镜像</span></span><br><span class="line">docker pull nginx:1.26.0</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看所有镜像</span></span><br><span class="line">docker images</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除指定<span class="built_in">id</span>的镜像（镜像<span class="built_in">id</span>）</span></span><br><span class="line">docker rmi xxxxxx</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">运行一个新容器</span></span><br><span class="line">docker run nginx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">停止容器</span></span><br><span class="line">docker stop keen_blackwell</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">启动容器</span></span><br><span class="line">docker start ec2</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">重启容器</span></span><br><span class="line">docker restart ec2</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看容器资源占用情况</span></span><br><span class="line">docker stats ec2</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看容器日志</span></span><br><span class="line">docker logs ec2</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除指定容器</span></span><br><span class="line">docker rm ec2</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">强制删除指定容器</span></span><br><span class="line">docker rm -f ec2</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">后台启动容器</span></span><br><span class="line">docker run -d --name mynginx nginx</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">后台启动并暴露端口</span></span><br><span class="line">docker run -d --name mynginx -p 80:80 nginx</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入容器内部</span></span><br><span class="line">docker exec -it mynginx /bin/bash</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">提交容器变化打成一个新的镜像</span></span><br><span class="line">docker commit -m &quot;update index.html&quot; mynginx mynginx:v1.0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">保存镜像为指定文件</span></span><br><span class="line">docker save -o mynginx.tar mynginx:v1.0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除多个镜像</span></span><br><span class="line">docker rmi bde7d154a67f 94543a6c1aef e784f4560448</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载镜像</span></span><br><span class="line">docker load -i mynginx.tar </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">登录 docker hub</span></span><br><span class="line">docker login</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新给镜像打标签</span></span><br><span class="line">docker tag mynginx:v1.0 simbaada/mynginx:v1.0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">推送镜像</span></span><br><span class="line">docker push simbaada/mynginx:v1.0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">批量删除容器命令</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">慎用，不要把有用的删掉了</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">docker ps -aq 获取当前所有的容器ID</span></span><br><span class="line">docker rm -f $(docker ps -aq)</span><br></pre></td></tr></table></figure>
+<p>以上为所有命令总结</p>
+<h1 id="3-存储-目录挂载，卷映射"><a href="#3-存储-目录挂载，卷映射" class="headerlink" title="3. 存储(目录挂载，卷映射)"></a>3. 存储(目录挂载，卷映射)</h1><h2 id="3-1-目录挂载"><a href="#3-1-目录挂载" class="headerlink" title="3.1 目录挂载"></a>3.1 目录挂载</h2><p>在上面我们如果要修改nginx的文件需要进入容器内部</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exce -it 4f231d6ce759 bash #4f231d6ce759为容器id bash为交互方式</span><br></pre></td></tr></table></figure>
+
+<p>修改了容器内的文件后，容器移除或者出问题则数据文件会丢失，</p>
+<p><strong>这时候就需要将外部文件挂载到容器中</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">在启动容器的时候-v即可</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">-v 外服文件位置:容器内文件位置</span></span><br><span class="line">-v /app/nghtml:/usr/share/nginx/html</span><br></pre></td></tr></table></figure>
+
+<p>执行以下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name app01 nginx</span><br></pre></td></tr></table></figure>
+
+<p>同时还会<strong>自动创建目录</strong></p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240619235400130.png" alt="image-20240619235400130"></p>
+<p>这时候访问80端口会发现是403，因为nginx文件挂载到了外部，但是外部没有index.html</p>
+<p>我们创建文件,再访问就会发现对应的页面有内容了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo hello. &gt; index.html #后续卷映射也用到这个文件</span><br></pre></td></tr></table></figure>
+
+<p>你再删掉这个容器，重新执行上面的挂载启动内容命令，还是可以的</p>
+<p><strong>进入内部修改文件，同样是可以修改外部文件的。</strong></p>
+<h2 id="3-2-卷映射"><a href="#3-2-卷映射" class="headerlink" title="3.2 卷映射"></a>3.2 卷映射</h2><p>如果挂载的是配置文件夹&#x2F;etc&#x2F;nginx&#x2F;</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html -v /app/ngconf:/etc/nginx --name app02 nginx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620002115594.png" alt="image-20240620002115594"></p>
+<p>这时候可能会启动不来容器，因为先生成外部空目录，挂载到内部后，相当于内部什么也没有，容器启动找不到配置文件，除非提前放入配置文件。默认是以外部文件为准。</p>
+<p>需要一个初始化跟内部保持一致的挂载方式，这就叫<strong>卷映射</strong>。</p>
+<p>卷就是一个存储，计算机以前是用一卷纸打孔方式存储。</p>
+<p>命令形式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">不以.或者./开始的就视为卷映射</span></span><br><span class="line">-v ngconf:/etc/nginx</span><br></pre></td></tr></table></figure>
+
+<p>卷映射配置文件，开启一个新容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 99:80 -v /app/nghtml:/usr/share/nginx/html -v ngconf:/etc/nginx --name new_app nginx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620002615246.png" alt="image-20240620002615246"></p>
+<p>访问99端口就可以看到hello.了，之前我们修改的index文件</p>
+<h3 id="修改卷映射的目录内容"><a href="#修改卷映射的目录内容" class="headerlink" title="修改卷映射的目录内容"></a>修改卷映射的目录内容</h3><p>docker统一把卷映射放在了<code>/var/lib/docker/volumes/&lt;volumes-name&gt;</code>下</p>
+<p>这时候修改内容，容器内部也会有变动，跟目录挂载相同</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620003203217.png" alt="image-20240620003203217"></p>
+<h2 id="3-3-总结"><a href="#3-3-总结" class="headerlink" title="3.3 总结"></a>3.3 总结</h2><p>目录挂载<code>-v /app/nghtml:/usr/share/nginx/html</code>：初始启动，外面目录与内部目录都是空的，互相同步</p>
+<p>卷映射<code>-v ngconf:/etc/nginx</code>：初始启动，外面目录以内部目录为准，互相同步</p>
+<p><strong>删除容器，卷不会被删除</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">列出所有的卷</span></span><br><span class="line">docker volume ls</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建卷</span></span><br><span class="line">docker volume create newvolume</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看卷详情，列出创建时间，所在目录等</span></span><br><span class="line">docker volume inspect ngconf</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620003845726.png" alt="image-20240620003845726"></p>
+<h1 id="4-网络"><a href="#4-网络" class="headerlink" title="4. 网络"></a>4. 网络</h1><h2 id="4-1-容器访问容器"><a href="#4-1-容器访问容器" class="headerlink" title="4.1 容器访问容器"></a>4.1 容器访问容器</h2><p>创建两个容器，进入app1，访问app2</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:80 --name app1 nginx</span><br><span class="line">docker run -d -p 90:80 --name app2 nginx</span><br><span class="line">docker exec -it app1 bash</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">在app1里访问app2，这里x.x.x.x是你自己的服务器地址</span></span><br><span class="line">curl http://x.x.x.x:90</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620004708550.png" alt="image-20240620004708550"></p>
+<p>但是这样会比较麻烦，其实是访问了外部网络让后再进来。</p>
+<p>其实装了docker后，<strong>docker会在本地装一个docker0网卡</strong></p>
+<p>可以使用<code>ip a</code>查看</p>
+<p>docker创建容器后都会加入这个网络，然后也会分配对应的ip地址</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620004936495.png" alt="image-20240620004936495"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看容器细节</span></span><br><span class="line">docker container inspect app1</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">也可以直接用inspect，可以看到容器的<span class="built_in">id</span>，查看app2也是一样的,如果只有两个容器，这时候app2应为172.17.0.3</span></span><br><span class="line">docker inspect app1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620005135433.png" alt="image-20240620005135433"></p>
+<p>这时候进入app1，重新执行<code>curl http://172.17.0.3:80 </code>,就可以访问首页了（<strong>注意，这里直接用容器内部端口即可</strong>）</p>
+<h2 id="4-2-网络访问固定"><a href="#4-2-网络访问固定" class="headerlink" title="4.2 网络访问固定"></a>4.2 网络访问固定</h2><p>ocker为每个容器分配唯一ip，就可以使用<code>容器ip+容器端口</code>互相访问</p>
+<p>ip可能随时变化，docker0默认不支持主机域名</p>
+<p>我们可以<strong>创建自定义网络，容器名就是稳定域名</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建自定义网络</span></span><br><span class="line">docker network create mynet</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看网络列表</span></span><br><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620011430368.png" alt="image-20240620011430368"></p>
+<p>删掉之前的容器，重新创建两个,使用–network指定网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:80 --name app1 --network mynet nginx #创建后inspect查看详情，这个是172.18.0.2</span><br><span class="line">docker run -d -p 90:80 --name app2 --network mynet nginx #创建后inspect查看详情，这个是172.18.0.3</span><br></pre></td></tr></table></figure>
+
+<p>进入app1，访问app2的内容</p>
+<p><strong>容器的名就是访问的域名</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it app1 bash</span><br><span class="line">curl http://app2:80 #直接访问容器，使用容器的80端口，这里用172.18.0.3也可以的</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620011940898.png" alt="image-20240620011940898"></p>
+<h2 id="4-3-总结"><a href="#4-3-总结" class="headerlink" title="4.3 总结"></a>4.3 总结</h2><ol>
+<li><p>docker为每个容器分配唯一ip，就可以使用<code>容器ip+容器端口</code>互相访问</p>
+<p>ip可能随时变化，docker0默认不支持主机域名</p>
+</li>
+<li><p>我们可以<strong>创建自定义网络，容器名就是稳定域名</strong></p>
+</li>
+<li><p>创建自定义网络并且重新开启容器后，可以用容器id，或者容器名直接访问，记得端口是容器内部端口</p>
+</li>
+</ol>
+<h1 id="5-网络实践"><a href="#5-网络实践" class="headerlink" title="5. 网络实践"></a>5. 网络实践</h1><h2 id="5-1-Redis主从复制集群"><a href="#5-1-Redis主从复制集群" class="headerlink" title="5.1 Redis主从复制集群"></a>5.1 Redis主从复制集群</h2><h3 id="初始化环境，开启容器"><a href="#初始化环境，开启容器" class="headerlink" title="初始化环境，开启容器"></a>初始化环境，开启容器</h3><ol>
+<li>redis01作为主集，负责写；redis02作为从集，负责读</li>
+<li>redis01端口映射（外服:内部-&gt;6379:6379）；redis02端口映射（外部:内部-&gt;6380:6389）</li>
+<li>redis实例保存数据的目录挂载到外部目录（redis01-&gt;&#x2F;app&#x2F;rd1；redis02-&gt;&#x2F;app&#x2F;rd2）</li>
+<li>采用自己创建的docker网络mynet</li>
+<li>采用bitnami的redis镜像(修改环境变量即可)，因为官方的还要修改配置文件，这里做实验用就图方便，参数可以查看dockehub里的bitnami&#x2F;redis文档</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置主集</span></span><br><span class="line">REDIS_REPLICATION_MODE=master</span><br><span class="line">REDIS_PASSWORD=123456</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置从集</span></span><br><span class="line">REDIS_REPLICATION_MODE=slave</span><br><span class="line">REDIS_MASTER_HOST=redis01 #主集地址，域名形式</span><br><span class="line">REDIS_MASTER_PORT_NUMBER=6379 #主集端口，因为是docker内部访问，都是内部端口6379</span><br><span class="line">REDIS_MASTER_PASSWORD=123456 #主集密码</span><br><span class="line">REDIS_PASSWORD=123456 #从集密码</span><br></pre></td></tr></table></figure>
+
+<p>记得提前定义网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">自定义网络</span></span><br><span class="line">docker network create mynet</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">下载好镜像</span></span><br><span class="line">docker pull bitnami/redis</span><br></pre></td></tr></table></figure>
+
+<p>创建主集，命令过长可以用反斜线，其中<code>-e</code>是指定环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 6379:6379 \</span><br><span class="line">-v /app/rd1:/bitnami/redis/data \</span><br><span class="line">-e REDIS_REPLICATION_MODE=master \</span><br><span class="line">-e REDIS_PASSWORD=123456 \</span><br><span class="line">--network mynet --name redis01 \</span><br><span class="line">bitnami/redis</span><br></pre></td></tr></table></figure>
+
+<p>这里会有个错误，因为创建的目录rd1只有root用户可读可写，<code>chmod -R 777 rd1</code>修改了重新启动即可，同理直接创建rd2修改权限，然后<code>docker restart 容器id</code>重启之前的容器即可</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620014200299.png" alt="image-20240620014200299"></p>
+<p>启动从集</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 6380:6379 \</span><br><span class="line">-v /app/rd2:/bitnami/redis/data \</span><br><span class="line">-e REDIS_REPLICATION_MODE=slave \</span><br><span class="line">-e REDIS_MASTER_HOST=redis01 \</span><br><span class="line">-e REDIS_MASTER_PORT_NUMBER=6379 \</span><br><span class="line">-e REDIS_MASTER_PASSWORD=123456 \</span><br><span class="line">-e REDIS_PASSWORD=123456 \</span><br><span class="line">--network mynet --name redis02 \</span><br><span class="line">bitnami/redis</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>当两个容器都启动完成后，用RedisDesktopManager连接到服务器的两个redis容器，记得开启防火墙规则端口，6379，6380</p>
+<p>RedisDesktopManager可以去github下载：<a target="_blank" rel="noopener" href="https://github.com/lework/RedisDesktopManager-Windows">https://github.com/lework/RedisDesktopManager-Windows</a></p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620022106280.png" alt="image-20240620022106280"></p>
+<ol>
+<li><p>写数据到master</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620022244815.png" alt="image-20240620022244815"></p>
+</li>
+<li><p>查看从集</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240620022320865.png" alt="image-20240620022320865"></p>
+</li>
+<li><p>修改同样可以同步</p>
+</li>
+<li><p>这只是实验，真正的生产环境更复杂</p>
+</li>
+<li><p>启动一个mysql容器</p>
+<p>挂载配置文件，挂载数据存储，设置root密码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 3306:3306 \</span><br><span class="line">-v /app/myconf:/etc/mysql/conf.d \</span><br><span class="line">-v /app/mydata:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">mysql:8.0.37-debian</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="6-Dokcer-Compose"><a href="#6-Dokcer-Compose" class="headerlink" title="6. Dokcer Compose"></a>6. Dokcer Compose</h1><h2 id="6-1-概述"><a href="#6-1-概述" class="headerlink" title="6.1 概述"></a>6.1 概述</h2><p>Docker Compose 是一个用于定义和运行多容器 Docker 应用的工具。通过使用一个叫做 <code>docker-compose.yml</code> 的配置文件，您可以配置应用所需的所有服务，然后通过一个简单的命令启动它们。</p>
+<ol>
+<li>定义多容器应用：在一个<code>docker-compose.yml</code>文件中定义需要的所有服务</li>
+<li>一键启动和停止：使用简单命令<code>docker compose up -d</code>(-d是后台启动) 启动所有服务，<code>docker compose down</code>停止并且清理服务</li>
+<li>服务编排：自动处理容器之间依赖和启动顺序</li>
+<li>共享网络：所有容器默认共享一个网络</li>
+<li>持久化数据：使用卷保存数据</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">后台启动</span></span><br><span class="line">docker compose up -d</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">停止并且清理服务</span></span><br><span class="line">docker compose down</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">重新启动配置的x1,x2,x3服务(这里是重新启动的意思，已经第一次启动过了)</span></span><br><span class="line">docker compose start x1 x2 x3</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">停止容器</span></span><br><span class="line">docker compose stop x1 x3</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">扩容,让x2启动三份</span></span><br><span class="line">docker compose scale x2=3</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-2-命令式安装一个wordpress博客"><a href="#6-2-命令式安装一个wordpress博客" class="headerlink" title="6.2 命令式安装一个wordpress博客"></a>6.2 命令式安装一个wordpress博客</h2><p>创建共享网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create blog</span><br></pre></td></tr></table></figure>
+
+<p>启动mysql</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">其中MYSQL_DATABASE为启动后默认创建数据库，/app/myconf为指定配置文件，--restart always指定开机默认启动</span></span><br><span class="line">docker run -d -p 3306:3306 \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">-e MYSQL_DATABASE=wordpress \</span><br><span class="line">-v mysql-data:/var/lib/mysql \</span><br><span class="line">-v /app/myconf:/etc/mysql/conf.d \</span><br><span class="line">--restart always --name mysql \</span><br><span class="line">--network blog \</span><br><span class="line">mysql:8.0</span><br></pre></td></tr></table></figure>
+
+<p>启动wordpress</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">WORDPRESS开头环境变量指定对应的需求环境变量，-v wordpress指定卷，</span></span><br><span class="line">docker run -d -p 8080:80 \</span><br><span class="line">-e WORDPRESS_DB_HOST=mysql \</span><br><span class="line">-e WORDPRESS_DB_USER=root \</span><br><span class="line">-e WORDPRESS_DB_PASSWORD=123456 \</span><br><span class="line">-e WORDPRESS_DB_NAME=wordpress \</span><br><span class="line">-v wordpress:/var/www/html \</span><br><span class="line">--restart always --name wordpress-app \</span><br><span class="line">--network blog \</span><br><span class="line">wordpress:latest</span><br></pre></td></tr></table></figure>
+
+<p>记得开启对应端口防火墙</p>
+<p>这时候登录xxxxx:8080即可</p>
+<h2 id="6-3-Dokcer-Compose文件"><a href="#6-3-Dokcer-Compose文件" class="headerlink" title="6.3 Dokcer Compose文件"></a>6.3 Dokcer Compose文件</h2><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/reference/">https://docs.docker.com/reference/</a></p>
+<p>可以一次性编排整个需要的容器名字，配置项，启动项，文件，网络，服务等</p>
+<p>这下如果需要一次性生成上述的一个博客系统，就不需要每次去执行所有命令</p>
+<h3 id="文件顶级元素"><a href="#文件顶级元素" class="headerlink" title="文件顶级元素"></a>文件顶级元素</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">name:名字</span><br><span class="line">services:服务</span><br><span class="line">networks:网络</span><br><span class="line">volumes:卷</span><br><span class="line">configs:配置</span><br><span class="line">secrets:密钥</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">myblog</span> 				<span class="comment">#部署的应用名</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">    <span class="attr">mysql:</span></span><br><span class="line">        <span class="attr">container_name:</span> <span class="string">mysql</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">mysql:8.0</span> 	<span class="comment">#镜像</span></span><br><span class="line">        <span class="attr">ports:</span>				<span class="comment">#端口,可能有多个端口，下面会用-开始，以下同理</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">        <span class="attr">environment:</span>		<span class="comment">#环境变量</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">MYSQL_ROOT_PASSWORD=123456</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">MYSQL_DATABASE=wordpress</span></span><br><span class="line">        <span class="attr">volumes:</span>			<span class="comment">#卷</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">mysql-data:/var/lib/mysql</span> <span class="comment">#卷挂载,要跨多个服务重用卷，必须在volumes顶级元素中声明命名卷</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">/app/myconf:/etc/mysql/conf.d</span> <span class="comment">#目录挂载</span></span><br><span class="line">        <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">        <span class="attr">networks:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">blog</span></span><br><span class="line">    <span class="attr">wordpress:</span></span><br><span class="line">        <span class="attr">container_name:</span> <span class="string">wordpress-app</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wordpress</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">        <span class="attr">environment:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">WORDPRESS_DB_HOST=mysql</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">WORDPRESS_DB_USER=root</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">WORDPRESS_DB_PASSWORD=123456</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">WORDPRESS_DB_NAME=wordpress</span></span><br><span class="line">        <span class="attr">volumes:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">wordpress:/var/www/html</span>    </span><br><span class="line">        <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">        <span class="attr">networks:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">blog</span></span><br><span class="line">        <span class="attr">depends_on:</span> <span class="comment">#决定启动顺序，需要mysql先启动</span></span><br><span class="line">            <span class="string">mysql</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">    <span class="attr">mysql-data:</span> <span class="comment">#还可以配置卷详细信息</span></span><br><span class="line">    <span class="attr">wordpress:</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">    <span class="attr">blog:</span></span><br></pre></td></tr></table></figure>
+
+<p>使用命令删除之前的容器，网络，卷，保持环境干净，然后使用compose一次性操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f $(docker ps -aq)</span><br><span class="line">docker network rm blog</span><br><span class="line">docker volume rm mysql-data wordpress</span><br></pre></td></tr></table></figure>
+
+<p>执行命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose -f compose.yaml up -d</span><br></pre></td></tr></table></figure>
+
+<p>可能会有一些报错</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621123112239.png" alt="image-20240621123112239"></p>
+<p>可以看到网络名会变成<code>应用名-网络名</code>的格式，卷格式也<code>应用名-卷名</code>,如果没有给容器名，则会是<code>myblog-wordpress-1</code>的格式</p>
+<p>这时候重新去访问x.x.x.x:8080就是跟之前一样的内容了。</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621123637212.png" alt="image-20240621123637212"></p>
+<h3 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h3><p>我们将wordpress端口从<code>8080:80</code>改为<code>80:80</code>，去掉wordpress的container_name试试</p>
+<p>然后重新执行一次<code>docker compose -f compose.yaml up -d</code></p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124212173.png" alt="image-20240621124212173"></p>
+<p>会发现，重新修改容器为80端口，重新启动了一个，并且名字变为了myblog-wordpress-1</p>
+<h3 id="执行down命令"><a href="#执行down命令" class="headerlink" title="执行down命令"></a>执行down命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose -f compose.yaml down</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124449687.png" alt="image-20240621124449687"></p>
+<p>发现移除了容器，移除了网络，但是其实并没有移除卷，这样下次启动，还可以使用同样的卷</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124522041.png" alt="image-20240621124522041"></p>
+<p>其实也可以加上-v移除卷,–rmi 移除镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose -f compose.yaml down --rmi all -v</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124702365.png" alt="image-20240621124702365"></p>
+<h1 id="7-Dockerfile"><a href="#7-Dockerfile" class="headerlink" title="7. Dockerfile"></a>7. Dockerfile</h1><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/reference/dockerfile/">https://docs.docker.com/reference/dockerfile/</a></p>
+<h2 id="制作自己的镜像"><a href="#制作自己的镜像" class="headerlink" title="制作自己的镜像"></a>制作自己的镜像</h2><p>目的：构建自定义镜像，将自己的应用打包成一个镜像</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621124935658.png" alt="image-20240621124935658"></p>
+<ol>
+<li>指定基础运行环境</li>
+<li>需要的软件包</li>
+<li>启动命令</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>常见指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FROM</td>
+<td>指定镜像基础环境</td>
+</tr>
+<tr>
+<td>RUN</td>
+<td>运行自定义命令</td>
+</tr>
+<tr>
+<td>CMD</td>
+<td>容器启动命令或者参数</td>
+</tr>
+<tr>
+<td>LABEL</td>
+<td>自定义标签</td>
+</tr>
+<tr>
+<td>EXPOSE</td>
+<td>指定暴露端口，其实并不是真的发布端口，可以理解为一种约束文档<br>后续运行还是要通过-p真的去暴露端口</td>
+</tr>
+<tr>
+<td>ENV</td>
+<td>环境变量</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>添加文件到镜像，可以自动解压缩，还可以远程下载文件并且复制</td>
+</tr>
+<tr>
+<td>COPY</td>
+<td>复制文件到镜像，只能复制本地的，不会解压缩</td>
+</tr>
+<tr>
+<td>ENTRYPOINT</td>
+<td>容器固定启动命令,数组类型是首选形式</td>
+</tr>
+<tr>
+<td>VOLUME</td>
+<td>数据卷</td>
+</tr>
+<tr>
+<td>USER</td>
+<td>指定用户和用户组</td>
+</tr>
+<tr>
+<td>WORKDIR</td>
+<td>指定默认工作目录</td>
+</tr>
+<tr>
+<td>ARG</td>
+<td>指定构建参数</td>
+</tr>
+</tbody></table>
+<p>下载参考资料中的app.jar，传到服务器</p>
+<p>编写dockerfile</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> openjdk:<span class="number">17</span></span><br><span class="line"><span class="keyword">LABEL</span><span class="language-bash"> author=simba</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> app.jar /app.jar</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;java&quot;</span>,<span class="string">&quot;-jar&quot;</span>,<span class="string">&quot;app.jar&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<p>保证dockerfile跟app.jar在同一目录,执行如下命令</p>
+<p>最后需要一个<code>.</code>,指定上下文目录，<strong>这个点代表的是当前目录，很重要</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -f Dockerfile -t myjavaapp:v1.0 .</span><br></pre></td></tr></table></figure>
+
+<p>这时候就在我们本地镜像就可以看到myjavaapp这个镜像了</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621130934066.png" alt="image-20240621130934066"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8888:8080 myjavaapp:v1.0</span><br></pre></td></tr></table></figure>
+
+<p>这时候就可以去访问x.x.x.x:8888,查看效果，会在网页打印“hello,world”，x.x.x.x为你服务器地址，记得放开8888端口</p>
+<h2 id="制作一个python，fastapi镜像"><a href="#制作一个python，fastapi镜像" class="headerlink" title="制作一个python，fastapi镜像"></a>制作一个python，fastapi镜像</h2><p>创建一个app镜像，目录内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">work</span><br><span class="line">├── Dockerfile</span><br><span class="line">└── app</span><br><span class="line">    └── main.py</span><br></pre></td></tr></table></figure>
+
+<p>其中main.py内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_root</span>():</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;hello, python-fastapi&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Dockerfile内容如下(这里修改pip为清华源，可以加速下载)</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.9</span>-slim</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./app /app</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip config <span class="built_in">set</span> global.trusted-host https://pypi.tuna.tsinghua.edu.cn</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip install fastapi uvicorn</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;uvicorn&quot;</span>, <span class="string">&quot;main:app&quot;</span>, <span class="string">&quot;--host&quot;</span>, <span class="string">&quot;0.0.0.0&quot;</span>, <span class="string">&quot;--port&quot;</span>, <span class="string">&quot;8080&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<p>确保在work目录下，执行如下命令构建镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t fastapi-app .</span><br></pre></td></tr></table></figure>
+
+<p>启动容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8999:8080 --name myfastapi fastapi-app</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621140838039.png" alt="image-20240621140838039"></p>
+<p>然后打开8999端口，访问x.x.x.x:8999就可以看到<code>&#123;&quot;message&quot;:&quot;hello, python-fastapi&quot;&#125;</code>这个内容了。</p>
+<p>python没有打包的概念，所以这里直接是代码文件进去的。</p>
+<h2 id="镜像分层存储机制"><a href="#镜像分层存储机制" class="headerlink" title="镜像分层存储机制"></a>镜像分层存储机制</h2><p>docker存储镜像是分层存储的</p>
+<p>dockerfile每一个行指令都会产生一个存储层，因为每个层都会产生改变，文件，环境等等。这样的好处是减轻磁盘存储压力</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141050025.png" alt="image-20240621141050025"></p>
+<p>如下，app1和app2共用了底层，然后增量存储自己要的东西。</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141100369.png" alt="image-20240621141100369"></p>
+<p>可以查看我们的mynginx:v1.0与nginx的区别，可以看到mynginx与nginx只有1.32kb的区别</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141332027.png" alt="image-20240621141332027"></p>
+<p>也可以用docker image imspect查看两个镜像的存储内容。</p>
+<p>镜像存储内容是R&#x2F;O，是只读的，容器启动会单独开一次，R&#x2F;W的可读可写，容器修改数据只会在自己的层。所以容器修改的数据在删除后就不存在了</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141523103.png" alt="image-20240621141523103"></p>
+<p>每个容器都有自己的R&#x2F;W层，互不相干，然后又有可能引用同样的镜像存储层。推荐修改的数据挂载到外部</p>
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621141633278.png" alt="image-20240621141633278"></p>
+<p>使用如下命令,可以查看对应容器消耗的存储</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -s</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621142007318.png" alt="image-20240621142007318"></p>
+<h1 id="8-一键启动"><a href="#8-一键启动" class="headerlink" title="8. 一键启动"></a>8. 一键启动</h1><p><img src="/../images/docker%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/image-20240621142108582.png" alt="image-20240621142108582"></p>
+<p>一次启动如上所有容器(其中的x.x.x.x改成自己的服务器地址即可)</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">devsoft</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bitnami/redis:latest</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">REDIS_PASSWORD=123456</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;6379:6379&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis-data:/bitnami/redis/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis-conf:/opt/bitnami/redis/mounted-etc</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8.0.31</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_ROOT_PASSWORD=123456</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;3306:3306&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;33060:33060&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql-conf:/etc/mysql/conf.d</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql-data:/var/lib/mysql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">rabbit:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">rabbitmq:3-management</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">rabbitmq</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5672:5672&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;15672:15672&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RABBITMQ_DEFAULT_USER=rabbit</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RABBITMQ_DEFAULT_PASS=rabbit</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RABBITMQ_DEFAULT_VHOST=dev</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">rabbit-data:/var/lib/rabbitmq</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">rabbit-app:/etc/rabbitmq</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">  <span class="attr">opensearch-node1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">opensearchproject/opensearch:2.13.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">opensearch-node1</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">cluster.name=opensearch-cluster</span> <span class="comment"># Name the cluster</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">node.name=opensearch-node1</span> <span class="comment"># Name the node that will run in this container</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.seed_hosts=opensearch-node1,opensearch-node2</span> <span class="comment"># Nodes to look for when discovering the cluster</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2</span> <span class="comment"># Nodes eligibile to serve as cluster manager</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">bootstrap.memory_lock=true</span> <span class="comment"># Disable JVM heap memory swapping</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m&quot;</span> <span class="comment"># Set min and max JVM heap sizes to at least 50% of system RAM</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;DISABLE_INSTALL_DEMO_CONFIG=true&quot;</span> <span class="comment"># Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;DISABLE_SECURITY_PLUGIN=true&quot;</span> <span class="comment"># Disables Security plugin</span></span><br><span class="line">    <span class="attr">ulimits:</span></span><br><span class="line">      <span class="attr">memlock:</span></span><br><span class="line">        <span class="attr">soft:</span> <span class="number">-1</span> <span class="comment"># Set memlock to unlimited (no soft or hard limit)</span></span><br><span class="line">        <span class="attr">hard:</span> <span class="number">-1</span></span><br><span class="line">      <span class="attr">nofile:</span></span><br><span class="line">        <span class="attr">soft:</span> <span class="number">65536</span> <span class="comment"># Maximum number of open files for the opensearch user - set to at least 65536</span></span><br><span class="line">        <span class="attr">hard:</span> <span class="number">65536</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">opensearch-data1:/usr/share/opensearch/data</span> <span class="comment"># Creates volume called opensearch-data1 and mounts it to the container</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">9200</span><span class="string">:9200</span> <span class="comment"># REST API</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">9600</span><span class="string">:9600</span> <span class="comment"># Performance Analyzer</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">opensearch-node2:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">opensearchproject/opensearch:2.13.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">opensearch-node2</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">cluster.name=opensearch-cluster</span> <span class="comment"># Name the cluster</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">node.name=opensearch-node2</span> <span class="comment"># Name the node that will run in this container</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.seed_hosts=opensearch-node1,opensearch-node2</span> <span class="comment"># Nodes to look for when discovering the cluster</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2</span> <span class="comment"># Nodes eligibile to serve as cluster manager</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">bootstrap.memory_lock=true</span> <span class="comment"># Disable JVM heap memory swapping</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m&quot;</span> <span class="comment"># Set min and max JVM heap sizes to at least 50% of system RAM</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;DISABLE_INSTALL_DEMO_CONFIG=true&quot;</span> <span class="comment"># Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;DISABLE_SECURITY_PLUGIN=true&quot;</span> <span class="comment"># Disables Security plugin</span></span><br><span class="line">    <span class="attr">ulimits:</span></span><br><span class="line">      <span class="attr">memlock:</span></span><br><span class="line">        <span class="attr">soft:</span> <span class="number">-1</span> <span class="comment"># Set memlock to unlimited (no soft or hard limit)</span></span><br><span class="line">        <span class="attr">hard:</span> <span class="number">-1</span></span><br><span class="line">      <span class="attr">nofile:</span></span><br><span class="line">        <span class="attr">soft:</span> <span class="number">65536</span> <span class="comment"># Maximum number of open files for the opensearch user - set to at least 65536</span></span><br><span class="line">        <span class="attr">hard:</span> <span class="number">65536</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">opensearch-data2:/usr/share/opensearch/data</span> <span class="comment"># Creates volume called opensearch-data2 and mounts it to the container</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">opensearch-dashboards:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">opensearchproject/opensearch-dashboards:2.13.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">opensearch-dashboards</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">5601</span><span class="string">:5601</span> <span class="comment"># Map host port 5601 to container port 5601</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601&quot;</span> <span class="comment"># Expose port 5601 for web access to OpenSearch Dashboards</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;OPENSEARCH_HOSTS=[&quot;http://opensearch-node1:9200&quot;,&quot;http://opensearch-node2:9200&quot;]&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;DISABLE_SECURITY_DASHBOARDS_PLUGIN=true&quot;</span> <span class="comment"># disables security dashboards plugin in OpenSearch Dashboards</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">  <span class="attr">zookeeper:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bitnami/zookeeper:3.9</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">zookeeper</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;2181:2181&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;zookeeper_data:/bitnami&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ALLOW_ANONYMOUS_LOGIN=yes</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">kafka:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&#x27;bitnami/kafka:3.4&#x27;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kafka</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">kafka</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;9092:9092&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;9094:9094&#x27;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_NODE_ID=0</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_PROCESS_ROLES=controller,broker</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://x.x.x.x:9094</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ALLOW_PLAINTEXT_LISTENER=yes</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;KAFKA_HEAP_OPTS=-Xmx512m -Xms512m&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kafka-conf:/bitnami/kafka/config</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kafka-data:/bitnami/kafka/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">  <span class="attr">kafka-ui:</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kafka-ui</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">provectuslabs/kafka-ui:latest</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8080</span><span class="string">:8080</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">DYNAMIC_CONFIG_ENABLED:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">KAFKA_CLUSTERS_0_NAME:</span> <span class="string">kafka-dev</span></span><br><span class="line">      <span class="attr">KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS:</span> <span class="string">kafka:9092</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kafkaui-app:/etc/kafkaui</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">nacos:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nacos/nacos-server:v2.3.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">nacos</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8848</span><span class="string">:8848</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">9848</span><span class="string">:9848</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PREFER_HOST_MODE=hostname</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MODE=standalone</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">JVM_XMX=512m</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">JVM_XMS=512m</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SPRING_DATASOURCE_PLATFORM=mysql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_SERVICE_HOST=nacos-mysql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_SERVICE_DB_NAME=nacos_devtest</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_SERVICE_PORT=3306</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_SERVICE_USER=nacos</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_SERVICE_PASSWORD=nacos</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;allowPublicKeyRetrieval=true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NACOS_AUTH_IDENTITY_KEY=2222</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NACOS_AUTH_IDENTITY_VALUE=2xxx</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NACOS_AUTH_ENABLE=true</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/app/nacos/standalone-logs/:/home/nacos/logs</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="attr">nacos-mysql:</span></span><br><span class="line">        <span class="attr">condition:</span> <span class="string">service_healthy</span></span><br><span class="line">  <span class="attr">nacos-mysql:</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">nacos-mysql</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">      <span class="attr">context:</span> <span class="string">.</span></span><br><span class="line">      <span class="attr">dockerfile_inline:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        FROM mysql:8.0.31</span></span><br><span class="line"><span class="string">        ADD https://raw.githubusercontent.com/alibaba/nacos/2.3.2/distribution/conf/mysql-schema.sql /docker-entrypoint-initdb.d/nacos-mysql.sql</span></span><br><span class="line"><span class="string">        RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/nacos-mysql.sql</span></span><br><span class="line"><span class="string">        EXPOSE 3306</span></span><br><span class="line"><span class="string">        CMD [&quot;mysqld&quot;, &quot;--character-set-server=utf8mb4&quot;, &quot;--collation-server=utf8mb4_unicode_ci&quot;]</span></span><br><span class="line"><span class="string"></span>    <span class="attr">image:</span> <span class="string">nacos/mysql:8.0.30</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_ROOT_PASSWORD=root</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_DATABASE=nacos_devtest</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_USER=nacos</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_PASSWORD=nacos</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">LANG=C.UTF-8</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">nacos-mysqldata:/var/lib/mysql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;13306:3306&quot;</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> [ <span class="string">&quot;CMD&quot;</span>, <span class="string">&quot;mysqladmin&quot;</span> ,<span class="string">&quot;ping&quot;</span>, <span class="string">&quot;-h&quot;</span>, <span class="string">&quot;localhost&quot;</span> ]</span><br><span class="line">      <span class="attr">interval:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">10s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">prometheus:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">prom/prometheus:v2.52.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">prometheus</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">9090</span><span class="string">:9090</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">prometheus-data:/prometheus</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">prometheus-conf:/etc/prometheus</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">grafana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">grafana/grafana:10.4.2</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">grafana-data:/var/lib/grafana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">redis-data:</span></span><br><span class="line">  <span class="attr">redis-conf:</span></span><br><span class="line">  <span class="attr">mysql-conf:</span></span><br><span class="line">  <span class="attr">mysql-data:</span></span><br><span class="line">  <span class="attr">rabbit-data:</span></span><br><span class="line">  <span class="attr">rabbit-app:</span></span><br><span class="line">  <span class="attr">opensearch-data1:</span></span><br><span class="line">  <span class="attr">opensearch-data2:</span></span><br><span class="line">  <span class="attr">nacos-mysqldata:</span></span><br><span class="line">  <span class="attr">zookeeper_data:</span></span><br><span class="line">  <span class="attr">kafka-conf:</span></span><br><span class="line">  <span class="attr">kafka-data:</span></span><br><span class="line">  <span class="attr">kafkaui-app:</span></span><br><span class="line">  <span class="attr">prometheus-data:</span></span><br><span class="line">  <span class="attr">prometheus-conf:</span></span><br><span class="line">  <span class="attr">grafana-data:</span></span><br></pre></td></tr></table></figure>
+
+<p>删除之前所有镜像还有卷</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f $(docker ps -aq)</span><br><span class="line">docker volume rm $(docker volume ls -q)</span><br></pre></td></tr></table></figure>
+
+<p>opensearch需要增大内存映射数目,执行一下下面的内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Disable memory paging and swapping performance 关闭内存分页</span></span><br><span class="line">sudo swapoff -a</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Edit the sysctl config file</span></span><br><span class="line">sudo vi /etc/sysctl.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add a line to define the desired value</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or change the value <span class="keyword">if</span> the key exists,</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">and <span class="keyword">then</span> save your changes.修改内存最大映射数</span></span><br><span class="line">vm.max_map_count=262144</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Reload the kernel parameters using sysctl 使用配置生效</span></span><br><span class="line">sudo sysctl -p</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Verify that the change was applied by checking the value</span></span><br><span class="line">cat /proc/sys/vm/max_map_count</span><br></pre></td></tr></table></figure>
+
+<p>编辑好compose.yaml文件后，执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>需要比较高性能服务器。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <!-- 新增总配置，不显示底部的声明 -->
+
+  
+  
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024-11-18-c-%E7%BB%8F%E5%85%B8tips.html" title="c++经典tips"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2024-06-14-go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E9%80%9A%E4%BF%A1%E7%B3%BB%E7%BB%9F.html" title="go语言实现通信系统"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,wechat"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/adaonline" target="_blank" title="Github" ><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
